@@ -1,6 +1,4 @@
 # Quarto build output
-_book/
-_site/
 *.html
 *.pdf
 *.docx

@@ -1,7 +1,17 @@
 # Multiple-outputs
 
+Choosing an output format early is an important part of generating a template report.
+
+At a high level:
+
+-   **PDF** outputs typically have cleaner and neater formats, with more tools for customisation, however, they are locked on completion (outside of some external PDF to Word tools).
+
+-   **Word** outputs are inherently customisable for publications, but are typically generated in a less output-ready format.
+
 In almost every organisation outside of academia Microsoft Word reigns supreme. This means for people who want to streamline reports, develop routine templates and bulk export parameterised reports they often have to play in the realm of .docx.
 
-This can come with various trade-offs
+When using either format there may be small finnicky hurdles or elements in the processes that leave you with a **publication gap**. Things like specific formatting, unique organisation requirements on things like table of chart formats.
 
-The publication gap
+These are important factors to consider from a cost benefit perspective. The nature of Quarto and rendering may mean that there is a significant dependency or time investment for including specific features. In order to adopt the benefits of templated reports often mean sacrificing or making concessions on these certain elements.
+
+{r} #\| label: publication-gap #\| echo: false #\| fig-cap: Quarto generated reports may fall short of the 'publication' version knitr::include_graphics(here::here("images","publication-gap.png"))

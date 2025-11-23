@@ -1,11 +1,11 @@
 # The case for templating
-
 ```{r}
-#| label: report-process
+#| label: business-case
 #| echo: false
-#| fig-cap: An example of how transformational structured reports can be
-knitr::include_graphics(here::here("images","report-process.png"))
+#| fig-cap: Quarto generated reports save time and minimise human error
+knitr::include_graphics(here::here("images","business-case.png"))
 ```
+
 
 ## Templated reporting
 
@@ -13,7 +13,7 @@ knitr::include_graphics(here::here("images","report-process.png"))
 
 There are a number of benefits to investing in templated or parameterised reporting:
 
--   **Reduced repitition:** Avoiding repetition of producing basic or standard analysis.
+-   **Reduced repetition:** Avoiding repetition of producing basic or standard analysis.
 
 -   **Better publication workflow:**
 
@@ -27,20 +27,9 @@ Templated reporting is not without all faults.
 
 Transforming ad-hoc processes to more structured end to end reports can be quite an investment, particularly if users aren't already using the processes. It is advisableot consider building a Quarto template of a report to be a capital investment. You spend the additional effort to build up the capability to develop reports quicker, more consistently and even automatically.
 
-Additionally, there may be small hurdles in the processes that leave you with a publication gap. Things like specific formatting, unique organisation requirements on things like table of chart formats. This is particularly relevant when considering to choose a Word or PDF output. On one side, PDF outputs typically have cleaner and neater formats, with more tools for customisation, however, they are locked on completion (outside of some external PDF to Word tools). On the other side, Word outputs are inherently customisable for publications, but are typically generated in a less output-ready format.
-
 ```{r}
-#| label: publication-gap
+#| label: report-process
 #| echo: false
-#| fig-cap: Quarto generated reports may fall short of the 'publication' version
-knitr::include_graphics(here::here("images","publication-gap.png"))
-```
-
-These are important facotrs to conisder from a cost benefit perspective. The nature of Quarto and rendering may mean that there is a significant dependency or time investment for including specific features. In order to adopt the benefits of templated reports often mean sacrificing or making concessions on these certain elements.
-
-```{r}
-#| label: business-case
-#| echo: false
-#| fig-cap: Quarto generated reports save time and minimise human error
-knitr::include_graphics(here::here("images","business-case.png"))
+#| fig-cap: An example of how transformational structured reports can be
+knitr::include_graphics(here::here("images","report-process.png"))
 ```

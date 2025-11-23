@@ -1,0 +1,126 @@
+# Dynamically writing text
+
+Dynamically writing text can make parameterised and automatic reports come alive. Dynamic text can provide context and story to the figures reported. This text is generally used in:
+
+-   Comparing numbers across time (increase, decrease, stay the same)
+
+-   Comparing numbers to benchmarks/baselines
+
+-   Or providing context to whether a high number is a good of bad thing
+
+To add extra flavour, approximate magnitude terminologies could be incorporated.
+
+For instance EFSA has some guidelines for communicating approximate probability.
+
+| Probability term       | Subjective probability range |
+|:-----------------------|:-----------------------------|
+| Almost certain         | 99-100%                      |
+| Extremely likely       | 95-99%                       |
+| Very likely            | 90-95%                       |
+| Likely                 | 66-90%                       |
+| About as likely as not | 33-66%                       |
+| Unlikely               | 10-33%                       |
+| Very unlikely          | 5-10%                        |
+| Extremely unlikely     | 1-5%                         |
+| Almost impossible      | 0-1%                         |
+
+<https://multimedia.efsa.europa.eu/uncertainty-tutorial/uncertainty-communication/expressions-approximate.html>
+
+Or for comparing values, something like this could be utilised:
+
+| Term                    | Rough ratio compared to reference |
+|-------------------------|-----------------------------------|
+| Much more than          | \> 10×                            |
+| Substantially more than | \~ 5 – 10×                        |
+| Considerably more than  | \~ 2 – 5×                         |
+| Somewhat more than      | \~ 1.25 – 2×                      |
+| About the same as       | \~ 0.80 – 1.25×                   |
+| Somewhat less than      | \~ 0.50 – 0.80×                   |
+| Considerably less than  | \~ 0.20 – 0.50×                   |
+| Substantially less than | \~ 0.10 – 0.20×                   |
+| Much less than          | \< 0.10×                          |
+
+```{r}
+#| include: false
+library(dplyr)
+library(stringr)
+library(scales)
+
+```
+
+An example function is below, which takes from \`get_value()\` and provides text interpreting the sentence based on parameters. You could also add features to this function to add a pool of synonyms so the dynamic text is less repetitive.
+
+```{r}
+#| echo: true
+
+interpret_sentence <- function(
+    value,                    # output of grab_value(), e.g. "12.3%" or "0.12"
+    context = NULL,           # optional text: "of Regional quintile-1 participants"
+    higher_is_better = TRUE,  # whether a high % is "good"
+    digits = 1,               # number of decimal places in printed %
+    cutpoints = c(0.05, 0.25, 0.75, 0.95) # thresholds for verbal labels)
+)
+{
+   # --- INTERNAL capitaliser ---------------------------------------------
+  ucfirst <- function(x) {
+    paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))
+  }
+  
+  # --- 1. Get numeric proportion from value -----------------------------
+  if (length(value) != 1L || is.na(value)) {
+    stop("interpret_pct_sentence() expects a single non-missing value.")
+  }
+  
+  # value might be "12.3%", "0.123", 0.123, 12.3, etc.
+  if (is.character(value)) {
+    num <- as.numeric(str_extract(value, "-?\\d+\\.?\\d*"))
+  } else {
+    num <- as.numeric(value)
+  }
+  
+  if (is.na(num)) {
+    stop("Could not extract a numeric value from 'value'.")
+  }
+  
+  # If looks like 0-1, treat as proportion; if >1, assume percentage (0-100)
+  p <- if (num > 1) num / 100 else num
+  
+  # --- 2. Translate proportion into qualitative phrase ------------------
+  cp <- cutpoints
+  phrase <- dplyr::case_when(
+    p <  cp[1] ~ if (higher_is_better) "a very small proportion" else "almost none",
+    p <  cp[2] ~ "a minority",
+    p <  cp[3] ~ "around half",
+    p <  cp[4] ~ "a clear majority",
+    TRUE       ~ if (higher_is_better) "almost all" else "the vast majority"
+  )
+  
+  # --- 3. Build percentage string ---------------------------------------
+  pct_string <- scales::percent(p, accuracy = 1 / 10^digits)
+  
+  # --- 4. Build final sentence ------------------------------------------
+  phrase_cap <- ucfirst(phrase)
+  
+  if (!is.null(context) && nzchar(context)) {
+    out <- paste0(phrase_cap, " (", pct_string, ") ", context, ".")
+  } else {
+    out <- paste0(phrase_cap, " (", pct_string, ").")
+  }
+  
+  out
+}
+
+
+```
+
+```{r}
+
+# interpret_sentence(
+#   grab_value(df, quintile == 4 & rurality == "Regional", pct,
+#              unit = "percent", digits = 4),
+#   context = "of Regional quintile-4 participants", 
+#   higher_is_better = FALSE,
+#   digits = 1
+# )
+    
+```

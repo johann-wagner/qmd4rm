@@ -1,0 +1,99 @@
+# Formatting tables (sit under word section)
+
+# Using {flextables} for pretty word tables
+
+```{r}
+#| include: false
+library(tidyverse)
+library(flextable)
+```
+
+Output tables in word can be a little messy, because the default table format prints poorly to .docx formats.
+
+```{r}
+#| label: flex-theme-base-eg-1
+#| echo: true
+
+starwars |> 
+  select(1:7) |> 
+  slice(1:10)
+
+```
+
+
+Flex tables is a neat tool to get around this but requires a bit of setting up for specific formatting. A work around for this can be defining your own flextable themes for different formats and calling it depending on the table.
+
+It is worthwhile to start with a base theme, which is applied to all tables.
+
+```{r}
+#| echo: true
+
+flex_theme_base <- function(ft) {
+  
+  nr <- nrow_part(ft, part = "body")
+  
+  ft |>
+    font(fontname = "Arial (Body)", part = "all") |>
+    fontsize(size = 10, part = "all") |>
+    align(align = "left", part = "all") |>
+    valign(valign = "middle", part = "all") |>
+    bold(part = "header") |>
+    bold(i = seq_len(nr), j = 1, part = "body") |>
+    bg(i = 1, bg = "#F0F0F0", part = "header") |>
+    border_remove() |>
+    border(border = officer::fp_border(color = "#CCCCCC"), part = "all") |>
+    autofit()
+}
+```
+
+Turning your ugly tables
+
+```{r}
+#| label: flex-theme-base-eg-2
+#| echo: true
+
+starwars |> 
+  select(1:7) |> 
+  slice(1:10) |> 
+  flextable() |>
+  flex_theme_base() 
+
+```
+
+And then making more custom formats which override this
+
+```{r}
+
+flex_theme_summary_column <- function(ft) {
+  
+  nr <- nrow_part(ft, part = "body")
+  nc <- length(ft$col_keys)
+  
+  ft |>
+    bg(
+      i = seq_len(nr),
+      j = nc,
+      bg = "#a2c6f5",
+      part = "body"
+    )
+}
+
+```
+
+And can be applied to relevant tables
+
+```{r}
+
+starwars |> 
+  select(1:7) |> 
+  slice(1:10) |> 
+  mutate(
+    bmi = mass / ((height / 100) ^ 2)
+  ) |>
+  flextable() |>
+  flex_theme_base() |> 
+  flex_theme_summary_column()
+
+
+```
+

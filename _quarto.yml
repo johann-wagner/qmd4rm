@@ -8,7 +8,6 @@ book:
   date: "23/11/2025"
   chapters:
     - index.qmd
-    - intro.qmd
     - business-case.qmd
     - multiple-outputs.qmd
     - word.qmd

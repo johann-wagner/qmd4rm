@@ -30,3 +30,6 @@ format:
     documentclass: scrreprt
 
 editor: visual
+
+execute:
+  freeze: auto

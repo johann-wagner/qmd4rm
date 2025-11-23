@@ -33,3 +33,5 @@ Thumbs.db
 # Dependency management
 renv/library/
 renv/staging/
+
+/.quarto/

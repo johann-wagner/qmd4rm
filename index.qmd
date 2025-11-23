@@ -6,7 +6,7 @@ This books content was initially drafted during the 2025 OceaniaR Hackathon in C
 
 # Why does it exist? {.unnumbered}
 
-This book looks to distil principles for best practice and hot tips for dynamic/reproducible quarto coding. Some amazing Quarto resources are out there already, like [Quarto for Scientists](https://qmd4sci.njtierney.com/) by Nicholas Tierney. This book will contribute to this pool of knowledge, providing some best practice principles for using Quarto in a functional and dynamic way.
+This book looks to distill principles for best practice and hot tips for dynamic/reproducible quarto coding. Some amazing Quarto resources are out there already, like [Quarto for Scientists](https://qmd4sci.njtierney.com/) by Nicholas Tierney. This book will contribute to this pool of knowledge, providing some best practice principles for using Quarto in a functional and dynamic way.
 
 # Who should read this {.unnumbered}
 

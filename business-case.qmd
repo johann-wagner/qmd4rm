@@ -36,5 +36,11 @@ Additionally, there may be small hurdles in the processes that leave you with a 
 knitr::include_graphics(here::here("images","publication-gap.png"))
 ```
 
-
 These are important facotrs to conisder from a cost benefit perspective. The nature of Quarto and rendering may mean that there is a significant dependency or time investment for including specific features. In order to adopt the benefits of templated reports often mean sacrificing or making concessions on these certain elements.
+
+```{r}
+#| label: business-case
+#| echo: false
+#| fig-cap: Quarto generated reports save time and minimise human error
+knitr::include_graphics(here::here("images","business-case.png"))
+```

@@ -1,0 +1,20 @@
+{
+  "business-case.qmd": {
+    "business-case.html": "26539ef9"
+  },
+  "index.qmd": {
+    "index.html": "f134b5da"
+  },
+  "intro.qmd": {
+    "intro.html": "b7483901"
+  },
+  "summary.qmd": {
+    "summary.html": "3c43b027"
+  },
+  "references.qmd": {
+    "references.html": "6c97284d"
+  },
+  "quarto-resources.qmd": {
+    "quarto-resources.html": "7a2b54cc"
+  }
+}

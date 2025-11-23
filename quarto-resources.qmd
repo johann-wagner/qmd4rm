@@ -1,0 +1,4 @@
+# Helpful resources
+
+Quarto for Scientists, Nicholas Tierney \
+https://qmd4sci.njtierney.com/

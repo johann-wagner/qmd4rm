@@ -12,6 +12,8 @@ book:
     - business-case.qmd
     - summary.qmd
     - references.qmd
+  appendices:
+    - quarto-resources.qmd
 
 bibliography: references.bib
 

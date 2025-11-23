@@ -42,11 +42,32 @@
   {
     "objectID": "business-case.html",
     "href": "business-case.html",
-    "title": "2  Report automation business process",
+    "title": "2  The case for templating",
     "section": "",
-    "text": "Testing\n\n\n\n\n\nAn example of how transformational structured reports can be",
+    "text": "2.1 Templated reporting\nThere are a number of benefits to investing in templated or parameterised reporting:\nThat said it does not come without its costs. Transforming ad-hoc processes to more structured end to end reports can be quite an investment, particularly if users aren’t already using the processes. It is advisableot consider building a Quarto template of a report to be a capital investment. You spend the additional effort to build up the capability to develop reports quicker, more consistently and even automatically.\nAdditionally, there may be small hurdles in the processes that. Things like specific formatting, unique organisation requirements on things like table of chart formats. From a cost benefit perspective, adopting these benefits may often mean sacrificing things like specific unique formatting requirements.\nTemplated reporting is not without all faults.",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Report automation business process</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>The case for templating</span>"
+    ]
+  },
+  {
+    "objectID": "business-case.html#templated-reporting",
+    "href": "business-case.html#templated-reporting",
+    "title": "2  The case for templating",
+    "section": "",
+    "text": "Time saving: Avoiding repetition of producing basic or standard analysis.\nConsistency: Can provide greater confidence with results\nCapability transfer: Bundling analysis into a structured format can be useful for coll",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>The case for templating</span>"
+    ]
+  },
+  {
+    "objectID": "quarto-resources.html",
+    "href": "quarto-resources.html",
+    "title": "Quarto for Report Makers",
+    "section": "",
+    "text": "Quarto for Scientists, Nicholas Tierney\nhttps://qmd4sci.njtierney.com/",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>quarto-resources.html</span>"
     ]
   }
 ]

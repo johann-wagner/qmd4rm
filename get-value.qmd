@@ -1,20 +1,16 @@
----
-format: html
----
-
-## Goal
+# Get values from dataframes neatly
 
 Write a function that can take an input data source (a data frame at this stage) and extract a numeric value from a specific cell. The cell is identified via the column name and filter criteria that uniquely identify the row.
 
 Arguments should include:
 
-- `data` - the input data frame, in tidy format
-- `row` - use `filter()` for row selection - no default
-- `column` - use `select()` for column selection - no default
-- `unit` - to define the unit of the value being returned (n, %, other?) - no default?
-- `digits` - define the number of significant digits to round to - default `1`
-- `smallcell` - define the value at which cell suppression occurs - default `FALSE`
-- `allowable_range` - two-value argument defining the upper and lower bounds the value must fall within - default `FALSE`
+-   `data` - the input data frame, in tidy format
+-   `row` - use `filter()` for row selection - no default
+-   `column` - use `select()` for column selection - no default
+-   `unit` - to define the unit of the value being returned (n, %, other?) - no default?
+-   `digits` - define the number of significant digits to round to - default `1`
+-   `smallcell` - define the value at which cell suppression occurs - default `FALSE`
+-   `allowable_range` - two-value argument defining the upper and lower bounds the value must fall within - default `FALSE`
 
 Checks on input to do:
 
@@ -131,7 +127,7 @@ get_value(df, count, (rurality == 'Regional' & quintile == 5), 1.1, "kcal/day")
 
 ### Percentage output
 
-Return as percentage 
+Return as percentage
 
 ```{r}
 get_value(
@@ -144,8 +140,7 @@ get_value(
 )
 ```
 
-The number of people living regionally is
-`r get_value(df, count, (rurality == 'Regional' & quintile == 5))`
+The number of people living regionally is `r get_value(df, count, (rurality == 'Regional' & quintile == 5))`
 
 ## Error conditions
 

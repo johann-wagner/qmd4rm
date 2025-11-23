@@ -8,5 +8,146 @@
     "crumbs": [
       "About this"
     ]
+  },
+  {
+    "objectID": "business-case.html",
+    "href": "business-case.html",
+    "title": "1  The case for templating",
+    "section": "",
+    "text": "1.1 Templated reporting",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>The case for templating</span>"
+    ]
+  },
+  {
+    "objectID": "business-case.html#templated-reporting",
+    "href": "business-case.html#templated-reporting",
+    "title": "1  The case for templating",
+    "section": "",
+    "text": "1.1.1 Benefits\nThere are a number of benefits to investing in templated or parameterised reporting:\n\nReduced repetition: Avoiding repetition of producing basic or standard analysis.\nBetter publication workflow:\nConsistency: Can provide greater confidence with results, with less chance of human error.\nCapability transfer: Analysis in a structured or templated format can be useful for knowledge transfer.\n\n\n\n1.1.2 Headaches\nTemplated reporting is not without all faults.\nTransforming ad-hoc processes to more structured end to end reports can be quite an investment, particularly if users aren’t already using the processes. It is advisableot consider building a Quarto template of a report to be a capital investment. You spend the additional effort to build up the capability to develop reports quicker, more consistently and even automatically.\n\n\n\n\n\nAn example of how transformational structured reports can be",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>The case for templating</span>"
+    ]
+  },
+  {
+    "objectID": "multiple-outputs.html",
+    "href": "multiple-outputs.html",
+    "title": "2  Multiple-outputs",
+    "section": "",
+    "text": "Choosing an output format early is an important part of generating a template report.\nAt a high level:\n\nPDF outputs typically have cleaner and neater formats, with more tools for customisation, however, they are locked on completion (outside of some external PDF to Word tools).\nWord outputs are inherently customisable for publications, but are typically generated in a less output-ready format.\n\nIn almost every organisation outside of academia Microsoft Word reigns supreme. This means for people who want to streamline reports, develop routine templates and bulk export parameterised reports they often have to play in the realm of .docx.\nWhen using either format there may be small finnicky hurdles or elements in the processes that leave you with a publication gap. Things like specific formatting, unique organisation requirements on things like table of chart formats.\nThese are important factors to consider from a cost benefit perspective. The nature of Quarto and rendering may mean that there is a significant dependency or time investment for including specific features. In order to adopt the benefits of templated reports often mean sacrificing or making concessions on these certain elements.\n{r} #| label: publication-gap #| echo: false #| fig-cap: Quarto generated reports may fall short of the ‘publication’ version knitr::include_graphics(here::here(“images”,“publication-gap.png”))",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Multiple-outputs</span>"
+    ]
+  },
+  {
+    "objectID": "word.html",
+    "href": "word.html",
+    "title": "3  Word Quirks",
+    "section": "",
+    "text": "3.1 Using a Reference Word Document\nQuarto supports rendering to Microsoft Word (.docx) and allows you to customise the output using a reference Word document. This is useful for applying corporate styles, headers, footers, and other Word-specific formatting. For more details, see:\nQuarto Word Output Formats Quarto Word Templates\nTo apply custom Word styles, specify a reference .docx file in your document’s YAML front matter. This file can include:\nExample YAML:\nUse the following YAML to use a reference .docx file. This file can contain all the usual content a .docx file might have. Like headers, footers, custom word styles",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Word Quirks</span>"
+    ]
+  },
+  {
+    "objectID": "word.html#using-a-reference-word-document",
+    "href": "word.html#using-a-reference-word-document",
+    "title": "3  Word Quirks",
+    "section": "",
+    "text": "Headers and footers\nCustom paragraph and text styles\nPage layout settings\n\n\nformat:\n  docx:\n    reference-doc: \"Reference Doc/vacancy_report_template.docx\"",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Word Quirks</span>"
+    ]
+  },
+  {
+    "objectID": "word.html#applying-custom-word-styles-in-quarto",
+    "href": "word.html#applying-custom-word-styles-in-quarto",
+    "title": "3  Word Quirks",
+    "section": "3.2 Applying Custom Word Styles in Quarto",
+    "text": "3.2 Applying Custom Word Styles in Quarto\nYou can apply styles defined in your reference document using custom attributes. For example:\n::: {custom-style=\"Key Points\"}\nThis text will be in the \"Key Points\" style.\n:::\nformat: docx: reference-doc: Reference Doc/vacancy_report_template.docx\nUse bold over any parameterised value to indicate to end users that this part of text has been dynamic.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Word Quirks</span>"
+    ]
+  },
+  {
+    "objectID": "word.html#how-to-create-breaks",
+    "href": "word.html#how-to-create-breaks",
+    "title": "3  Word Quirks",
+    "section": "3.3 How to create breaks",
+    "text": "3.3 How to create breaks\nTo insert a page break in Word output, use:\n\\pagebreak\nFor linebreaks:\n\\",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Word Quirks</span>"
+    ]
+  },
+  {
+    "objectID": "flextables.html",
+    "href": "flextables.html",
+    "title": "4  Formatting tables",
+    "section": "",
+    "text": "5 Using {flextables} for pretty word tables\nOutput tables in word can be a little messy, because the default table format prints poorly to .docx formats.\n\nstarwars |&gt; \n  select(1:7) |&gt; \n  slice(1:10)\n\n# A tibble: 10 × 7\n   name               height  mass hair_color    skin_color eye_color birth_year\n   &lt;chr&gt;               &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt;\n 1 Luke Skywalker        172    77 blond         fair       blue            19  \n 2 C-3PO                 167    75 &lt;NA&gt;          gold       yellow         112  \n 3 R2-D2                  96    32 &lt;NA&gt;          white, bl… red             33  \n 4 Darth Vader           202   136 none          white      yellow          41.9\n 5 Leia Organa           150    49 brown         light      brown           19  \n 6 Owen Lars             178   120 brown, grey   light      blue            52  \n 7 Beru Whitesun Lars    165    75 brown         light      blue            47  \n 8 R5-D4                  97    32 &lt;NA&gt;          white, red red             NA  \n 9 Biggs Darklighter     183    84 black         light      brown           24  \n10 Obi-Wan Kenobi        182    77 auburn, white fair       blue-gray       57  \n\n\nFlex tables is a neat tool to get around this but requires a bit of setting up for specific formatting. A work around for this can be defining your own flextable themes for different formats and calling it depending on the table.\nIt is worthwhile to start with a base theme, which is applied to all tables.\n\nflex_theme_base &lt;- function(ft) {\n  \n  nr &lt;- nrow_part(ft, part = \"body\")\n  \n  ft |&gt;\n    font(fontname = \"Arial (Body)\", part = \"all\") |&gt;\n    fontsize(size = 10, part = \"all\") |&gt;\n    align(align = \"left\", part = \"all\") |&gt;\n    valign(valign = \"middle\", part = \"all\") |&gt;\n    bold(part = \"header\") |&gt;\n    bold(i = seq_len(nr), j = 1, part = \"body\") |&gt;\n    bg(i = 1, bg = \"#F0F0F0\", part = \"header\") |&gt;\n    border_remove() |&gt;\n    border(border = officer::fp_border(color = \"#CCCCCC\"), part = \"all\") |&gt;\n    autofit()\n}\n\nTurning your ugly tables\n\nstarwars |&gt; \n  select(1:7) |&gt; \n  slice(1:10) |&gt; \n  flextable() |&gt;\n  flex_theme_base() \n\nnameheightmasshair_colorskin_coloreye_colorbirth_yearLuke Skywalker17277blondfairblue19.0C-3PO16775goldyellow112.0R2-D29632white, bluered33.0Darth Vader202136nonewhiteyellow41.9Leia Organa15049brownlightbrown19.0Owen Lars178120brown, greylightblue52.0Beru Whitesun Lars16575brownlightblue47.0R5-D49732white, redredBiggs Darklighter18384blacklightbrown24.0Obi-Wan Kenobi18277auburn, whitefairblue-gray57.0\n\n\nAnd then making more custom formats which override this\n\nflex_theme_summary_column &lt;- function(ft) {\n  \n  nr &lt;- nrow_part(ft, part = \"body\")\n  nc &lt;- length(ft$col_keys)\n  \n  ft |&gt;\n    bg(\n      i = seq_len(nr),\n      j = nc,\n      bg = \"#a2c6f5\",\n      part = \"body\"\n    )\n}\n\nAnd can be applied to relevant tables\n\nstarwars |&gt; \n  select(1:7) |&gt; \n  slice(1:10) |&gt; \n  mutate(\n    bmi = mass / ((height / 100) ^ 2)\n  ) |&gt;\n  flextable() |&gt;\n  flex_theme_base() |&gt; \n  flex_theme_summary_column()\n\nnameheightmasshair_colorskin_coloreye_colorbirth_yearbmiLuke Skywalker17277blondfairblue19.026.02758C-3PO16775goldyellow112.026.89232R2-D29632white, bluered33.034.72222Darth Vader202136nonewhiteyellow41.933.33007Leia Organa15049brownlightbrown19.021.77778Owen Lars178120brown, greylightblue52.037.87401Beru Whitesun Lars16575brownlightblue47.027.54821R5-D49732white, redred34.00999Biggs Darklighter18384blacklightbrown24.025.08286Obi-Wan Kenobi18277auburn, whitefairblue-gray57.023.24598",
+    "crumbs": [
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Formatting tables</span>"
+    ]
+  },
+  {
+    "objectID": "get-value.html",
+    "href": "get-value.html",
+    "title": "5  Goal",
+    "section": "",
+    "text": "5.1 Example\nWrite a function that can take an input data source (a data frame at this stage) and extract a numeric value from a specific cell. The cell is identified via the column name and filter criteria that uniquely identify the row.\nArguments should include:\nChecks on input to do:\nThe errors and output are demonstrated using the following dataset\ndf &lt;- tibble::tibble(\n  quintile = rep(c(1,1,3,4,5), 2),\n  rurality = c(rep(\"Regional\",5), rep(\"Urban\", 5)),\n  count = rep(c(1251.12,5125.23,6162.12,9949.0125,1661), 2),\n  n_and_pct = rep(c(\"15.6 (12.2%)\",\"1 (0.1%)\",\"51.5 (85.2%)\", \"102 (115%)\", \"223 100%\"), 2),\n  n_n = rep(c(\"15.2 1\", \"61.4 1\", \"61.0 2\", \"32.4 4.2\", \"95.2 15.2\"), 2),\n  pct = rep(c(\"0.12\",\"0.56\"),5),\n  listcol = stringr::str_extract_all(n_and_pct,\"\\\\d\")\n)\n\ndf\n\n# A tibble: 10 × 7\n   quintile rurality count n_and_pct    n_n       pct   listcol  \n      &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt; &lt;list&gt;   \n 1        1 Regional 1251. 15.6 (12.2%) 15.2 1    0.12  &lt;chr [6]&gt;\n 2        1 Regional 5125. 1 (0.1%)     61.4 1    0.56  &lt;chr [3]&gt;\n 3        3 Regional 6162. 51.5 (85.2%) 61.0 2    0.12  &lt;chr [6]&gt;\n 4        4 Regional 9949. 102 (115%)   32.4 4.2  0.56  &lt;chr [6]&gt;\n 5        5 Regional 1661  223 100%     95.2 15.2 0.12  &lt;chr [6]&gt;\n 6        1 Urban    1251. 15.6 (12.2%) 15.2 1    0.56  &lt;chr [6]&gt;\n 7        1 Urban    5125. 1 (0.1%)     61.4 1    0.12  &lt;chr [3]&gt;\n 8        3 Urban    6162. 51.5 (85.2%) 61.0 2    0.56  &lt;chr [6]&gt;\n 9        4 Urban    9949. 102 (115%)   32.4 4.2  0.12  &lt;chr [6]&gt;\n10        5 Urban    1661  223 100%     95.2 15.2 0.56  &lt;chr [6]&gt;",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Goal</span>"
+    ]
+  },
+  {
+    "objectID": "get-value.html#example",
+    "href": "get-value.html#example",
+    "title": "5  Goal",
+    "section": "",
+    "text": "5.1.1 Numeric output\nReturn a number\n\nget_value(\n  data = df,\n1  column = count,\n2  criteria = (rurality == 'Regional' & quintile == 5),\n3  digits = 1.1,\n4  unit = \"n\"\n  )\n\n\n1\n\nWhich column the value is to come from\n\n2\n\nThe criteria to filter rows by. Multiple criteria are allowed, they must be written between parentheses and multiple conditions specified using usual logic notation (e.g. |, &). Note dplyr::filter() notation using commas is not allowed\n\n3\n\nUsing {scales} notation to define the expected format. Specifying digits = 1.1 for a value of 14.61136 would return 14.6, while specifying digits = 1.11 returns 14.61.\n\n4\n\nThe unit the value is in. n returns the value as it is. percent returns a value formatted as a percentage including the % sign. Any other string than these two options is pasted at the end. For example:\n\n\n\n\n[1] \"1,661\"\n\n\n\nget_value(df, count, (rurality == 'Regional' & quintile == 5), 1.1, \"kcal/day\")\n\n[1] \"1,661 kcal/day\"\n\n\n\n\n5.1.2 Percentage output\nReturn as percentage\n\nget_value(\n  data = df,\n  criteria = (rurality == 'Regional' & quintile == 5),\n  column = pct,\n  unit = \"percent\",\n  digits = 1.11,\n  multiply = 100\n)\n\n[1] \"12.21%\"\n\n\nThe number of people living regionally is 1,660",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Goal</span>"
+    ]
+  },
+  {
+    "objectID": "get-value.html#error-conditions",
+    "href": "get-value.html#error-conditions",
+    "title": "5  Goal",
+    "section": "5.2 Error conditions",
+    "text": "5.2 Error conditions\nThe data argument only accepts data frames and is checked using is.data.frame(data)\nThe value pulled from the data frame must not be empty (length(value) == 0 | is.null(value))\nThere must be only one pulled value, meaning list/vector/df columns are not acceptable length(value) &gt; 1\nThere must not more than one digit value to be extracted (stringr::str_count(value,\"\\\\d+?(\\\\.\\\\d+)\") &gt; 1)\nThere must not be zero values to extract (stringr::str_count(value,\"\\\\d+?(\\\\.\\\\d+)\") == 0)\nIf the value is not a character, it must not be a class other than numeric !is.numeric(value)",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Goal</span>"
+    ]
+  },
+  {
+    "objectID": "get-value.html#further-development",
+    "href": "get-value.html#further-development",
+    "title": "5  Goal",
+    "section": "5.3 Further development",
+    "text": "5.3 Further development\n\nAllow for more inputs than data frames, e.g. vectors",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Goal</span>"
+    ]
+  },
+  {
+    "objectID": "interpreting-values.html",
+    "href": "interpreting-values.html",
+    "title": "6  Dynamically writing text",
+    "section": "",
+    "text": "Dynamically writing text can make parameterised and automatic reports come alive. Dynamic text can provide context and story to the figures reported. This text is generally used in:\n\nComparing numbers across time (increase, decrease, stay the same)\nComparing numbers to benchmarks/baselines\nOr providing context to whether a high number is a good of bad thing\n\nTo add extra flavour, approximate magnitude terminologies could be incorporated.\nFor instance EFSA has some guidelines for communicating approximate probability.\n\n\n\nProbability term\nSubjective probability range\n\n\n\n\nAlmost certain\n99-100%\n\n\nExtremely likely\n95-99%\n\n\nVery likely\n90-95%\n\n\nLikely\n66-90%\n\n\nAbout as likely as not\n33-66%\n\n\nUnlikely\n10-33%\n\n\nVery unlikely\n5-10%\n\n\nExtremely unlikely\n1-5%\n\n\nAlmost impossible\n0-1%\n\n\n\nhttps://multimedia.efsa.europa.eu/uncertainty-tutorial/uncertainty-communication/expressions-approximate.html\nOr for comparing values, something like this could be utilised:\n\n\n\nTerm\nRough ratio compared to reference\n\n\n\n\nMuch more than\n&gt; 10×\n\n\nSubstantially more than\n~ 5 – 10×\n\n\nConsiderably more than\n~ 2 – 5×\n\n\nSomewhat more than\n~ 1.25 – 2×\n\n\nAbout the same as\n~ 0.80 – 1.25×\n\n\nSomewhat less than\n~ 0.50 – 0.80×\n\n\nConsiderably less than\n~ 0.20 – 0.50×\n\n\nSubstantially less than\n~ 0.10 – 0.20×\n\n\nMuch less than\n&lt; 0.10×\n\n\n\nAn example function is below, which takes from `get_value()` and provides text interpreting the sentence based on parameters. You could also add features to this function to add a pool of synonyms so the dynamic text is less repetitive.\n\ninterpret_sentence &lt;- function(\n    value,                    # output of grab_value(), e.g. \"12.3%\" or \"0.12\"\n    context = NULL,           # optional text: \"of Regional quintile-1 participants\"\n    higher_is_better = TRUE,  # whether a high % is \"good\"\n    digits = 1,               # number of decimal places in printed %\n    cutpoints = c(0.05, 0.25, 0.75, 0.95) # thresholds for verbal labels)\n)\n{\n   # --- INTERNAL capitaliser ---------------------------------------------\n  ucfirst &lt;- function(x) {\n    paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x)))\n  }\n  \n  # --- 1. Get numeric proportion from value -----------------------------\n  if (length(value) != 1L || is.na(value)) {\n    stop(\"interpret_pct_sentence() expects a single non-missing value.\")\n  }\n  \n  # value might be \"12.3%\", \"0.123\", 0.123, 12.3, etc.\n  if (is.character(value)) {\n    num &lt;- as.numeric(str_extract(value, \"-?\\\\d+\\\\.?\\\\d*\"))\n  } else {\n    num &lt;- as.numeric(value)\n  }\n  \n  if (is.na(num)) {\n    stop(\"Could not extract a numeric value from 'value'.\")\n  }\n  \n  # If looks like 0-1, treat as proportion; if &gt;1, assume percentage (0-100)\n  p &lt;- if (num &gt; 1) num / 100 else num\n  \n  # --- 2. Translate proportion into qualitative phrase ------------------\n  cp &lt;- cutpoints\n  phrase &lt;- dplyr::case_when(\n    p &lt;  cp[1] ~ if (higher_is_better) \"a very small proportion\" else \"almost none\",\n    p &lt;  cp[2] ~ \"a minority\",\n    p &lt;  cp[3] ~ \"around half\",\n    p &lt;  cp[4] ~ \"a clear majority\",\n    TRUE       ~ if (higher_is_better) \"almost all\" else \"the vast majority\"\n  )\n  \n  # --- 3. Build percentage string ---------------------------------------\n  pct_string &lt;- scales::percent(p, accuracy = 1 / 10^digits)\n  \n  # --- 4. Build final sentence ------------------------------------------\n  phrase_cap &lt;- ucfirst(phrase)\n  \n  if (!is.null(context) && nzchar(context)) {\n    out &lt;- paste0(phrase_cap, \" (\", pct_string, \") \", context, \".\")\n  } else {\n    out &lt;- paste0(phrase_cap, \" (\", pct_string, \").\")\n  }\n  \n  out\n}\n\n\n# interpret_sentence(\n#   grab_value(df, quintile == 4 & rurality == \"Regional\", pct,\n#              unit = \"percent\", digits = 4),\n#   context = \"of Regional quintile-4 participants\", \n#   higher_is_better = FALSE,\n#   digits = 1\n# )",
+    "crumbs": [
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Dynamically writing text</span>"
+    ]
+  },
+  {
+    "objectID": "quarto-resources.html",
+    "href": "quarto-resources.html",
+    "title": "Appendix A — Helpful resources",
+    "section": "",
+    "text": "Quarto for Scientists\nNicholas Tierney\nhttps://qmd4sci.njtierney.com/\nCollaborative and Reproducible Practices\nMichael Lydeamore & Naveen Kaushik\nhttps://rcp.numbat.space/\nMonash Quarto Templates\nMonash University\nhttps://github.com/quarto-monash\nReproducible Research in R\nMonash University\nhttps://monashdatafluency.github.io/r-rep-res/index.html",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Helpful resources</span>"
+    ]
   }
 ]

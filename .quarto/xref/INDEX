@@ -1,35 +1,26 @@
 {
-  "business-case.qmd": {
-    "business-case.html": "26539ef9"
-  },
   "index.qmd": {
-    "index.html": "f134b5da"
+    "index.html": "af5c467d"
   },
-  "intro.qmd": {
-    "intro.html": "b7483901"
-  },
-  "summary.qmd": {
-    "summary.html": "3c43b027"
-  },
-  "references.qmd": {
-    "references.html": "6c97284d"
-  },
-  "quarto-resources.qmd": {
-    "quarto-resources.html": "7a2b54cc"
+  "business-case.qmd": {
+    "business-case.html": "eeee2db5"
   },
   "multiple-outputs.qmd": {
-    "multiple-outputs.html": "a014cb48"
-  },
-  "flextables.qmd": {
-    "flextables.html": "af06c456"
+    "multiple-outputs.html": "0a1472ef"
   },
   "word.qmd": {
-    "word.html": "f311ecb8"
+    "word.html": "d8241753"
+  },
+  "flextables.qmd": {
+    "flextables.html": "cc3df5de"
   },
   "get-value.qmd": {
-    "get-value.html": "a0e19066"
+    "get-value.html": "c0bd7680"
   },
   "interpreting-values.qmd": {
-    "interpreting-values.html": "c3e724b8"
+    "interpreting-values.html": "20ba6d71"
+  },
+  "quarto-resources.qmd": {
+    "quarto-resources.html": "55333d08"
   }
 }

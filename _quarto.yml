@@ -9,8 +9,8 @@ book:
   chapters:
     - index.qmd
     - business-case.qmd
-    - multiple-outputs.qmd
-    - word.qmd
+    - output-options.qmd
+    - word-quirks.qmd
     - flextables.qmd
     - get-value.qmd
     - interpreting-values.qmd

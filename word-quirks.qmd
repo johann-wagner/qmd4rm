@@ -1,22 +1,20 @@
 # Word Quirks
 
-Quarto supports rendering to Microsoft Word (.docx) and allows you to customise the output using a reference Word document. This is useful for applying corporate styles, headers, footers, and other Word-specific formatting.
-For more details, see:
+Quarto supports rendering to Microsoft Word (.docx) and allows you to customise the output using a reference Word document. This is useful for applying corporate styles, headers, footers, and other Word-specific formatting. For more details, see:
 
-[Quarto Word Output Formats](https://quarto.org/docs/output-formats/ms-word.html)
-[Quarto Word Templates](https://quarto.org/docs/output-formats/ms-word-templates.html)
+[Quarto Word Output Formats](https://quarto.org/docs/output-formats/ms-word.html) [Quarto Word Templates](https://quarto.org/docs/output-formats/ms-word-templates.html)
 
 ## Using a Reference Word Document
 
 To apply custom Word styles, specify a reference .docx file in your document’s YAML front matter. This file can include:
 
-* Headers and footers
-* Custom paragraph and text styles
-* Page layout settings
+-   Headers and footers
+-   Custom paragraph and text styles
+-   Page layout settings
 
 Example YAML:
 
-```
+```         
 format:
   docx:
     reference-doc: "Reference Doc/vacancy_report_template.docx"
@@ -28,7 +26,7 @@ Use the following YAML to use a reference .docx file. This file can contain all 
 
 You can apply styles defined in your reference document using custom attributes. For example:
 
-```
+```         
 ::: {custom-style="Key Points"}
 This text will be in the "Key Points" style.
 :::
@@ -44,11 +42,12 @@ Use bold over any parameterised value to indicate to end users that this part of
 
 To insert a page break in Word output, use:
 
-```
+```         
 \pagebreak
 ```
 
 For linebreaks:
-```
+
+```         
 \
 ```

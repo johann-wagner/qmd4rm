@@ -5,13 +5,13 @@
 https://qmd4sci.njtierney.com/
 
 **Collaborative and Reproducible Practices**\
-*Michael Lydeamore & Naveen Kaushik* \
+*Michael Lydeamore & Naveen Kaushik*\
 https://rcp.numbat.space/
 
 **Monash Quarto Templates**\
-*Monash University* \
+*Monash University*\
 https://github.com/quarto-monash
 
 **Reproducible Research in R**\
-*Monash University* \
+*Monash University*\
 https://monashdatafluency.github.io/r-rep-res/index.html

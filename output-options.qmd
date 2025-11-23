@@ -1,4 +1,4 @@
-# Multiple-outputs
+# Output formats
 
 Choosing an output format early is an important part of generating a template report.
 

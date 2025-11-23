@@ -14,6 +14,7 @@ book:
     - part: "Word + .docx"
       chapters:
         - flextables.qmd
+    - interpreting-values.qmd
     - summary.qmd
     - references.qmd
   appendices:

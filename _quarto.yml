@@ -4,24 +4,19 @@ project:
 book:
   title: "Quarto for Report Makers"
   author: "OceaniaR Hackathon"
-  description: "If you are doing an operation more than 3 times [quote Hadley] it should be a function. The same goes for generating regular or automated reports. Quarto is a powerful tool that allows you integrate your code, text an figures in a single file in order to make high quality, reproducible reports. This is particularly powerful for generating parameterised templates which can generate a report across a number of parameters"
+  description: "If you are doing an operation more than 3 times it should be a function. The same goes for generating regular or automated reports. Quarto is a powerful tool that allows you integrate your code, text an figures in a single file in order to make high quality, reproducible reports. This is particularly powerful for generating parameterised templates which can generate a report across a number of parameters"
   date: "23/11/2025"
   chapters:
     - index.qmd
     - intro.qmd
     - business-case.qmd
     - multiple-outputs.qmd
-    - part: "Word + .docx"
-      chapters:
-        - flextables.qmd
-        - word.qmd
+    - word.qmd
+    - flextables.qmd
     - get-value.qmd
     - interpreting-values.qmd
-    - references.qmd
   appendices:
     - quarto-resources.qmd
-
-bibliography: references.bib
 
 format:
   html:
@@ -31,7 +26,7 @@ format:
   pdf:
     documentclass: scrreprt
 
-editor: visual
-
 execute:
   freeze: auto
+
+editor: visual

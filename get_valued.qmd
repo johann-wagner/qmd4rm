@@ -1,0 +1,160 @@
+---
+format: html
+---
+
+## Goal
+
+Write a function that can take an input data source (a data frame at this stage) and extract a numeric value from a specific cell. The cell is identified via the column name and filter criteria that uniquely identify the row.
+
+Arguments should include - `data` - the input data frame, in tidy format - `row` - use `filter()` for row selection - no default - `column` - use `select()` for column selection - no default - `unit` - to define the unit of the value being returned (n, %, other?) - no default? - `digits` - define the number of significant digits to round to - default 1 - `smallcell` - define the value at which cell suppression occurs - default FALSE - `allowable_range` - two-value argument defining the upper and lower bounds the value must fall within - default FALSE
+
+Checks on input to do:
+
+-   [ ] Is the input numeric? If not, extract digits. If no digits extracted, return error
+-   [ ] Is there more than one numeric value?
+
+```{r}
+get_value <- function(
+    data, # The input data 
+    column, # The column the value is in
+    criteria, # The filter criteria to identify a singular row
+    digits = 2, # The number of significant digits to round to
+    unit = "n", # The units for the value, either n, percent, or a custom value
+    multiply = 1, # Set whether the value is a proportion or percentage
+    suppress = FALSE, # Suppress values smaller than this value
+    allowable_range = FALSE # Set the min and max values the value must be between
+){
+  if(is.data.frame(data)){
+    # Pull the value based on the criteria and column
+  value <- data |> 
+    dplyr::filter({{ criteria }}) |> 
+    dplyr::pull({{ column }})
+  } else {
+    stop("Input data is not a data frame")
+  }
+  
+  # Check that value is not empty
+  if(length(value) == 0 | is.null(value)){
+    stop("No values returned by criteria")
+  }
+  # Check there are not multiple values returned
+  if(length(value) > 1){
+    stop("More than one row was returned by criteria")
+  }
+  
+  if(class(value) == "character") {
+    if(stringr::str_count(value,"\\d+?(\\.\\d+)") > 1){
+      stop("Multiple possible values detected in cell")
+    } else if(stringr::str_count(value,"\\d+?(\\.\\d+)") == 0){
+      stop("No digits detected in cell")
+    } else {
+      value <- as.numeric(
+        stringr::str_extract(
+          string = value, 
+          pattern = "\\d+?(\\.\\d+)"
+          )
+        )
+    }
+  } else if(!is.numeric(value)) {
+    stop("column is not numeric or character")
+  }
+  
+  if(unit =="percent"){
+    # Format as a percentage
+    return(
+      scales::label_percent(
+        accuracy = digits,
+        scale = multiply,
+        big.mark = ","
+        )(value)
+      )
+  } else {
+    value <- scales::label_number(accuracy = digits, big.mark = ",")(value)
+  } 
+  
+  if(unit == "n"){
+    return(value)
+  } else {
+    return(paste0(value, " ", unit))
+  }
+}
+```
+
+## Example
+
+The errors and output are demonstrated using the following dataset
+
+```{r}
+df <- tibble::tibble(
+  quintile = rep(c(1,1,3,4,5), 2),
+  rurality = c(rep("Regional",5), rep("Urban", 5)),
+  count = rep(c(1251.12,5125.23,6162.12,9949.0125,1661), 2),
+  n_and_pct = rep(c("15.6 (12.2%)","1 (0.1%)","51.5 (85.2%)", "102 (115%)", "223 100%"), 2),
+  n_n = rep(c("15.2 1", "61.4 1", "61.0 2", "32.4 4.2", "95.2 15.2"), 2),
+  pct = rep(c("0.12","0.56"),5),
+  listcol = stringr::str_extract_all(n_and_pct,"\\d")
+)
+
+df
+```
+
+### Numeric output
+
+Return a number
+
+```{r}
+get_value(
+  data = df,
+  column = count, # <1>
+  criteria = (rurality == 'Regional' & quintile == 5), # <2>
+  digits = 1.1 # <3>
+  unit = "n", # <4>
+  )
+```
+
+1.  Which column the value is to come from
+2.  The criteria to filter rows by. Multiple criteria are allowed, they must be written between parentheses and multiple conditions specified using usual logic notation (e.g. `|`, `&`). Note `dplyr::filter()` notation using commas is not allowed
+3.  Using `{scales}` notation to define the expected format. Specifying `digits = 1.1` for a value of 14.61136 would return 14.6, while specifying `digits = 1.11` returns 14.61.
+4.  The unit the value is in. `n` returns the value as it is. `percent` returns a value formatted as a percentage including the `%` sign. Any other string than these two options is pasted at the end. For example:
+
+```{r}
+get_value(df, count, (rurality == 'Regional' & quintile == 5), 1.1, "kcal/day")
+```
+
+### Percentage output
+
+Return as percentage 
+
+```{r}
+get_value(
+  data = df,
+  criteria = (rurality == 'Regional' & quintile == 5),
+  column = pct,
+  unit = "percent",
+  digits = 1.11,
+  multiply = 100
+)
+```
+
+
+The number of people living regionally
+`r get_value(df, count, (rurality == 'Regional' & quintile == 5))`
+
+## Error conditions
+
+The data argument only accepts data frames and is checked using `is.data.frame(data)`
+
+The value pulled from the data frame must not be empty `(length(value) == 0 | is.null(value))`
+
+There must be only one pulled value, meaning list/vector/df columns are not acceptable `length(value) > 1`
+
+There must not more than one digit value to be extracted `(stringr::str_count(value,"\\d+?(\\.\\d+)") > 1)`
+
+There must not be zero values to extract `(stringr::str_count(value,"\\d+?(\\.\\d+)") == 0)`
+
+If the value is not a character, it must not be a class other than numeric `!is.numeric(value)`
+
+## Further development
+
+1.  Allow for more inputs than data frames, e.g. vectors
+2.  

@@ -18,5 +18,46 @@
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>The case for templating</span>"
     ]
+  },
+  {
+    "objectID": "multiple-outputs.html",
+    "href": "multiple-outputs.html",
+    "title": "3  Multiple-outputs",
+    "section": "",
+    "text": "In almost every organisation outside of academia Microsoft Word reigns supreme. This means for people who want to streamline reports, develop routine templates and bulk export parameterised reports they often have to play in the realm of .docx.\nThis can come with various trade-offs\nThe publication gap",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Multiple-outputs</span>"
+    ]
+  },
+  {
+    "objectID": "flextables.html",
+    "href": "flextables.html",
+    "title": "4  Formatting tables",
+    "section": "",
+    "text": "5 Using {flextables} for pretty word tables\nOutput tables in word can be a little messy, because the default table format prints poorly to .docx formats.\n\nstarwars |&gt; \n  select(1:7) |&gt; \n  slice(1:10)\n\n# A tibble: 10 × 7\n   name               height  mass hair_color    skin_color eye_color birth_year\n   &lt;chr&gt;               &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt;\n 1 Luke Skywalker        172    77 blond         fair       blue            19  \n 2 C-3PO                 167    75 &lt;NA&gt;          gold       yellow         112  \n 3 R2-D2                  96    32 &lt;NA&gt;          white, bl… red             33  \n 4 Darth Vader           202   136 none          white      yellow          41.9\n 5 Leia Organa           150    49 brown         light      brown           19  \n 6 Owen Lars             178   120 brown, grey   light      blue            52  \n 7 Beru Whitesun Lars    165    75 brown         light      blue            47  \n 8 R5-D4                  97    32 &lt;NA&gt;          white, red red             NA  \n 9 Biggs Darklighter     183    84 black         light      brown           24  \n10 Obi-Wan Kenobi        182    77 auburn, white fair       blue-gray       57  \n\n\nFlex tables is a neat tool to get around this but requires a bit of setting up for specific formatting. A work around for this can be defining your own flextable themes for different formats and calling it depending on the table.\nIt is worthwhile to start with a base theme, which is applied to all tables.\n\nflex_theme_base &lt;- function(ft) {\n  \n  nr &lt;- nrow_part(ft, part = \"body\")\n  \n  ft |&gt;\n    font(fontname = \"Arial (Body)\", part = \"all\") |&gt;\n    fontsize(size = 10, part = \"all\") |&gt;\n    align(align = \"left\", part = \"all\") |&gt;\n    valign(valign = \"middle\", part = \"all\") |&gt;\n    bold(part = \"header\") |&gt;\n    bold(i = seq_len(nr), j = 1, part = \"body\") |&gt;\n    bg(i = 1, bg = \"#F0F0F0\", part = \"header\") |&gt;\n    border_remove() |&gt;\n    border(border = officer::fp_border(color = \"#CCCCCC\"), part = \"all\") |&gt;\n    autofit()\n}\n\nTurning your ugly tables\n\nstarwars |&gt; \n  select(1:7) |&gt; \n  slice(1:10) |&gt; \n  flextable() |&gt;\n  flex_theme_base() \n\nnameheightmasshair_colorskin_coloreye_colorbirth_yearLuke Skywalker17277blondfairblue19.0C-3PO16775goldyellow112.0R2-D29632white, bluered33.0Darth Vader202136nonewhiteyellow41.9Leia Organa15049brownlightbrown19.0Owen Lars178120brown, greylightblue52.0Beru Whitesun Lars16575brownlightblue47.0R5-D49732white, redredBiggs Darklighter18384blacklightbrown24.0Obi-Wan Kenobi18277auburn, whitefairblue-gray57.0\n\n\nAnd then making more custom formats which override this\n\nflex_theme_summary_column &lt;- function(ft) {\n  \n  nr &lt;- nrow_part(ft, part = \"body\")\n  nc &lt;- length(ft$col_keys)\n  \n  ft |&gt;\n    bg(\n      i = seq_len(nr),\n      j = nc,\n      bg = \"#a2c6f5\",\n      part = \"body\"\n    )\n}\n\nAnd can be applied to relevant tables\n\nstarwars |&gt; \n  select(1:7) |&gt; \n  slice(1:10) |&gt; \n  mutate(\n    bmi = mass / ((height / 100) ^ 2)\n  ) |&gt;\n  flextable() |&gt;\n  flex_theme_base() |&gt; \n  flex_theme_summary_column()\n\nnameheightmasshair_colorskin_coloreye_colorbirth_yearbmiLuke Skywalker17277blondfairblue19.026.02758C-3PO16775goldyellow112.026.89232R2-D29632white, bluered33.034.72222Darth Vader202136nonewhiteyellow41.933.33007Leia Organa15049brownlightbrown19.021.77778Owen Lars178120brown, greylightblue52.037.87401Beru Whitesun Lars16575brownlightblue47.027.54821R5-D49732white, redred34.00999Biggs Darklighter18384blacklightbrown24.025.08286Obi-Wan Kenobi18277auburn, whitefairblue-gray57.023.24598",
+    "crumbs": [
+      "Word + .docx",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Formatting tables</span>"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Quarto for Report Makers",
+    "section": "",
+    "text": "About this\nThis is a book using Quarto for generating reports. These can range from parameterised and automatic reports, to draft reports halfway on the way to publication.\nThis books content was initially drafted during the 2025 OceaniaR Hackathon in Canberra. It spawned from shared experiences of users generating primarily internal reports, working through hurdles and tricks on working with dynamic text, parameterisation, and multi-output formats.\n\n\nWhy does it exist?\nThis book looks to distil principles for best practice and hot tips for dynamic/reproducible quarto coding. Some amazing Quarto resources are out there already, like Quarto for Scientists by Nicholas Tierney. This book will contribute to this pool of knowledge, providing some best practice principles for using Quarto in a functional and dynamic way.\n\n\nWho should read this\n\nIf you’ve ever wanted to automate a report, or streamline a document or process. 🧰\nIf you are sick of copy pasting charts, tables between your output folder and the documents.\nIf you enjoy developing reproducible analytical pipelines, beautiful and functionalised visualisations, or creatively writing dynamic text. 📊\nYou’re a process or structured code savant who loves making structured and neat code! 🛠️",
+    "crumbs": [
+      "About this"
+    ]
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "5  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Summary</span>"
+    ]
   }
 ]

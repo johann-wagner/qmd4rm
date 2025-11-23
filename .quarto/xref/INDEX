@@ -16,5 +16,11 @@
   },
   "quarto-resources.qmd": {
     "quarto-resources.html": "7a2b54cc"
+  },
+  "multiple-outputs.qmd": {
+    "multiple-outputs.html": "a014cb48"
+  },
+  "flextables.qmd": {
+    "flextables.html": "af06c456"
   }
 }

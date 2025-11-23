@@ -10,6 +10,10 @@ book:
     - index.qmd
     - intro.qmd
     - business-case.qmd
+    - multiple-outputs.qmd
+    - part: "Word + .docx"
+      chapters:
+        - flextables.qmd
     - summary.qmd
     - references.qmd
   appendices:
@@ -26,4 +30,3 @@ format:
     documentclass: scrreprt
 
 editor: visual
-

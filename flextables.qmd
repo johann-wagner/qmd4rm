@@ -1,4 +1,4 @@
-# Formatting tables (sit under word section)
+# Formatting tables
 
 # Using {flextables} for pretty word tables
 

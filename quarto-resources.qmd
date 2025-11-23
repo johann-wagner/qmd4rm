@@ -1,4 +1,17 @@
 # Helpful resources
 
-Quarto for Scientists, Nicholas Tierney \
+**Quarto for Scientists\
+***Nicholas Tierney*\
 https://qmd4sci.njtierney.com/
+
+**Collaborative and Reproducible Practices**\
+*Michael Lydeamore & Naveen Kaushik* \
+https://rcp.numbat.space/
+
+**Monash Quarto Templates**\
+*Monash University* \
+https://github.com/quarto-monash
+
+**Reproducible Research in R**\
+*Monash University* \
+https://monashdatafluency.github.io/r-rep-res/index.html

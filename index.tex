@@ -167,6 +167,18 @@
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
+\usepackage{fontspec}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{colortbl}
+\usepackage{hhline}
+\newlength\Oldarrayrulewidth
+\newlength\Oldtabcolsep
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{wrapfig}
 \KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{bookmark}{}{\usepackage{bookmark}}
@@ -298,7 +310,7 @@ in a functional and dynamic way.
 
 \bookmarksetup{startatroot}
 
-\chapter{}\label{section}
+\chapter{Introduction}\label{introduction}
 
 \bookmarksetup{startatroot}
 
@@ -382,6 +394,382 @@ making concessions on these certain elements.
 \caption{Quarto generated reports save time and minimise human error}
 
 \end{figure}%
+
+\bookmarksetup{startatroot}
+
+\chapter{Multiple-outputs}\label{multiple-outputs}
+
+In almost every organisation outside of academia Microsoft Word reigns
+supreme. This means for people who want to streamline reports, develop
+routine templates and bulk export parameterised reports they often have
+to play in the realm of .docx.
+
+This can come with various trade-offs
+
+The publication gap
+
+\part{Word + .docx}
+
+\chapter{Formatting tables}\label{formatting-tables}
+
+\chapter{Using \{flextables\} for pretty word
+tables}\label{using-flextables-for-pretty-word-tables}
+
+Output tables in word can be a little messy, because the default table
+format prints poorly to .docx formats.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{starwars }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{select}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+# A tibble: 10 x 7
+   name               height  mass hair_color    skin_color eye_color birth_year
+   <chr>               <int> <dbl> <chr>         <chr>      <chr>          <dbl>
+ 1 Luke Skywalker        172    77 blond         fair       blue            19  
+ 2 C-3PO                 167    75 <NA>          gold       yellow         112  
+ 3 R2-D2                  96    32 <NA>          white, bl~ red             33  
+ 4 Darth Vader           202   136 none          white      yellow          41.9
+ 5 Leia Organa           150    49 brown         light      brown           19  
+ 6 Owen Lars             178   120 brown, grey   light      blue            52  
+ 7 Beru Whitesun Lars    165    75 brown         light      blue            47  
+ 8 R5-D4                  97    32 <NA>          white, red red             NA  
+ 9 Biggs Darklighter     183    84 black         light      brown           24  
+10 Obi-Wan Kenobi        182    77 auburn, white fair       blue-gray       57  
+\end{verbatim}
+
+Flex tables is a neat tool to get around this but requires a bit of
+setting up for specific formatting. A work around for this can be
+defining your own flextable themes for different formats and calling it
+depending on the table.
+
+It is worthwhile to start with a base theme, which is applied to all
+tables.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flex\_theme\_base }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(ft) \{}
+  
+\NormalTok{  nr }\OtherTok{\textless{}{-}} \FunctionTok{nrow\_part}\NormalTok{(ft, }\AttributeTok{part =} \StringTok{"body"}\NormalTok{)}
+  
+\NormalTok{  ft }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{font}\NormalTok{(}\AttributeTok{fontname =} \StringTok{"Arial (Body)"}\NormalTok{, }\AttributeTok{part =} \StringTok{"all"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{fontsize}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{, }\AttributeTok{part =} \StringTok{"all"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{align}\NormalTok{(}\AttributeTok{align =} \StringTok{"left"}\NormalTok{, }\AttributeTok{part =} \StringTok{"all"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{valign}\NormalTok{(}\AttributeTok{valign =} \StringTok{"middle"}\NormalTok{, }\AttributeTok{part =} \StringTok{"all"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{bold}\NormalTok{(}\AttributeTok{part =} \StringTok{"header"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{bold}\NormalTok{(}\AttributeTok{i =} \FunctionTok{seq\_len}\NormalTok{(nr), }\AttributeTok{j =} \DecValTok{1}\NormalTok{, }\AttributeTok{part =} \StringTok{"body"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{bg}\NormalTok{(}\AttributeTok{i =} \DecValTok{1}\NormalTok{, }\AttributeTok{bg =} \StringTok{"\#F0F0F0"}\NormalTok{, }\AttributeTok{part =} \StringTok{"header"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{border\_remove}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{border}\NormalTok{(}\AttributeTok{border =}\NormalTok{ officer}\SpecialCharTok{::}\FunctionTok{fp\_border}\NormalTok{(}\AttributeTok{color =} \StringTok{"\#CCCCCC"}\NormalTok{), }\AttributeTok{part =} \StringTok{"all"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{autofit}\NormalTok{()}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+Turning your ugly tables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{starwars }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{select}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{flextable}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{flex\_theme\_base}\NormalTok{() }
+\end{Highlighting}
+\end{Shaded}
+
+\global\setlength{\Oldarrayrulewidth}{\arrayrulewidth}
+
+\global\setlength{\Oldtabcolsep}{\tabcolsep}
+
+\setlength{\tabcolsep}{2pt}
+
+\renewcommand*{\arraystretch}{1.5}
+
+
+
+\providecommand{\ascline}[3]{\noalign{\global\arrayrulewidth #1}\arrayrulecolor[HTML]{#2}\cline{#3}}
+
+\begin{longtable*}[c]{|p{1.60in}|p{0.70in}|p{0.64in}|p{1.12in}|p{0.98in}|p{0.93in}|p{0.96in}}
+
+
+
+\hhline{>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{name}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{height}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{mass}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{hair\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{skin\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{eye\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{birth\_year}}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}\endfirsthead 
+
+\hhline{>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{name}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{height}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{mass}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{hair\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{skin\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{eye\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{birth\_year}}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}\endhead
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Luke\ Skywalker}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{172}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{77}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{blond}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{fair}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{blue}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{19.0}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{C-3PO}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{167}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{75}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{gold}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{yellow}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{112.0}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{R2-D2}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{96}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{32}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{white,\ blue}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{red}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{33.0}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Darth\ Vader}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{202}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{136}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{none}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{white}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{yellow}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{41.9}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Leia\ Organa}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{150}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{49}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{brown}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{light}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{brown}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{19.0}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Owen\ Lars}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{178}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{120}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{brown,\ grey}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{light}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{blue}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{52.0}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Beru\ Whitesun\ Lars}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{165}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{75}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{brown}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{light}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{blue}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{47.0}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{R5-D4}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{97}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{32}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{white,\ red}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{red}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Biggs\ Darklighter}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{183}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{84}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{black}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{light}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{brown}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{24.0}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Obi-Wan\ Kenobi}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{182}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{77}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{auburn,\ white}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{fair}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{blue-gray}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{57.0}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\end{longtable*}
+
+
+
+\arrayrulecolor[HTML]{000000}
+
+\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}
+
+\global\setlength{\tabcolsep}{\Oldtabcolsep}
+
+\renewcommand*{\arraystretch}{1}
+
+And then making more custom formats which override this
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{flex\_theme\_summary\_column }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(ft) \{}
+  
+\NormalTok{  nr }\OtherTok{\textless{}{-}} \FunctionTok{nrow\_part}\NormalTok{(ft, }\AttributeTok{part =} \StringTok{"body"}\NormalTok{)}
+\NormalTok{  nc }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(ft}\SpecialCharTok{$}\NormalTok{col\_keys)}
+  
+\NormalTok{  ft }\SpecialCharTok{|\textgreater{}}
+    \FunctionTok{bg}\NormalTok{(}
+      \AttributeTok{i =} \FunctionTok{seq\_len}\NormalTok{(nr),}
+      \AttributeTok{j =}\NormalTok{ nc,}
+      \AttributeTok{bg =} \StringTok{"\#a2c6f5"}\NormalTok{,}
+      \AttributeTok{part =} \StringTok{"body"}
+\NormalTok{    )}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+And can be applied to relevant tables
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{starwars }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{select}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{7}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{10}\NormalTok{) }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{bmi =}\NormalTok{ mass }\SpecialCharTok{/}\NormalTok{ ((height }\SpecialCharTok{/} \DecValTok{100}\NormalTok{) }\SpecialCharTok{\^{}} \DecValTok{2}\NormalTok{)}
+\NormalTok{  ) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{flextable}\NormalTok{() }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{flex\_theme\_base}\NormalTok{() }\SpecialCharTok{|\textgreater{}} 
+  \FunctionTok{flex\_theme\_summary\_column}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\global\setlength{\Oldarrayrulewidth}{\arrayrulewidth}
+
+\global\setlength{\Oldtabcolsep}{\tabcolsep}
+
+\setlength{\tabcolsep}{2pt}
+
+\renewcommand*{\arraystretch}{1.5}
+
+
+
+\providecommand{\ascline}[3]{\noalign{\global\arrayrulewidth #1}\arrayrulecolor[HTML]{#2}\cline{#3}}
+
+\begin{longtable*}[c]{|p{1.60in}|p{0.70in}|p{0.64in}|p{1.12in}|p{0.98in}|p{0.93in}|p{0.96in}|p{0.86in}}
+
+
+
+\hhline{>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{name}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{height}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{mass}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{hair\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{skin\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{eye\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{birth\_year}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{bmi}}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}\endfirsthead 
+
+\hhline{>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}->{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{name}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{height}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{mass}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{hair\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{skin\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{eye\_color}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{birth\_year}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{F0F0F0}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{bmi}}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}\endhead
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Luke\ Skywalker}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{172}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{77}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{blond}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{fair}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{blue}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{19.0}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{A2C6F5}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{26.02758}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{C-3PO}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{167}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{75}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{gold}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{yellow}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{112.0}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{A2C6F5}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{26.89232}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{R2-D2}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{96}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{32}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{white,\ blue}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{red}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{33.0}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{A2C6F5}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{34.72222}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Darth\ Vader}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{202}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{136}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{none}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{white}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{yellow}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{41.9}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{A2C6F5}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{33.33007}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Leia\ Organa}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{150}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{49}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{brown}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{light}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{brown}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{19.0}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{A2C6F5}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{21.77778}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Owen\ Lars}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{178}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{120}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{brown,\ grey}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{light}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{blue}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{52.0}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{A2C6F5}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{37.87401}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Beru\ Whitesun\ Lars}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{165}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{75}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{brown}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{light}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{blue}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{47.0}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{A2C6F5}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{27.54821}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{R5-D4}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{97}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{32}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{white,\ red}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{red}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{A2C6F5}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{34.00999}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Biggs\ Darklighter}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{183}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{84}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{black}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{light}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{brown}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{24.0}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{A2C6F5}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{25.08286}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.6in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{\textbf{Obi-Wan\ Kenobi}}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.7in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{182}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.64in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{77}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 1.12in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{auburn,\ white}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.98in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{fair}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.93in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{blue-gray}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\raggedright}NA{\dimexpr 0.96in+0\tabcolsep}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{57.0}}}} & \multicolumn{1}{!{\color[HTML]{CCCCCC}\vrule width 1pt}>{\cellcolor[HTML]{A2C6F5}\raggedright}NA{\dimexpr 0.86in+0\tabcolsep}!{\color[HTML]{CCCCCC}\vrule width 1pt}}{\textcolor[HTML]{000000}{\fontsize{10}{10}\selectfont{\global\setmainfont{Arial (Body)}{23.24598}}}} \\
+
+\noalign{\global\arrayrulewidth 1pt}\arrayrulecolor[HTML]{CCCCCC}
+
+\hhline{|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-|>{\arrayrulecolor[HTML]{CCCCCC}\global\arrayrulewidth=1pt}-}
+
+
+
+\end{longtable*}
+
+
+
+\arrayrulecolor[HTML]{000000}
+
+\global\setlength{\arrayrulewidth}{\Oldarrayrulewidth}
+
+\global\setlength{\tabcolsep}{\Oldtabcolsep}
+
+\renewcommand*{\arraystretch}{1}
 
 \bookmarksetup{startatroot}
 

@@ -17,7 +17,6 @@ book:
         - word.qmd
     - get-value.qmd
     - interpreting-values.qmd
-    - summary.qmd
     - references.qmd
   appendices:
     - quarto-resources.qmd

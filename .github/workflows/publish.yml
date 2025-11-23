@@ -1,25 +1,43 @@
-on:
-  workflow_dispatch:
-  push:
-    branches: main
-
 name: Quarto Publish
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+      # 1. Checkout repository
+      - uses: actions/checkout@v4
 
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
+      # 2. Set up R (needed because your .qmd uses R)
+      - uses: r-lib/actions/setup-r@v2
 
-      - name: Render and Publish
-        uses: quarto-dev/quarto-actions/publish@v2
+      # 3. Set up R package dependencies (adjust the list as needed)
+      #    This reads DESCRIPTION if you have a package, or you can list packages explicitly.
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: >
+            any::rmarkdown
+            any::knitr
+            any::tidyverse
+            any::tinytex
+
+      # 4. Install Quarto CLI
+      - uses: quarto-dev/quarto-actions/setup@v2
+
+      # 5. Optional: install TinyTeX for PDF rendering
+      #    Skip this step if you only render HTML.
+      - name: Install TinyTeX
+        run: Rscript -e "tinytex::install_tinytex()"
+
+      # 6. Publish to gh-pages and render the project
+      - uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
+          render: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

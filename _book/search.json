@@ -1,0 +1,12 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Quarto for Report Makers",
+    "section": "",
+    "text": "About this\nThis is a book using Quarto for generating reports. These can range from parameterised and automatic reports, to draft reports halfway on the way to publication.\nThis books content was initially drafted during the 2025 OceaniaR Hackathon in Canberra. It spawned from shared experiences of users generating primarily internal reports, working through hurdles and tricks on working with dynamic text, parameterisation, and multi-output formats.\n\n\nWhy does it exist?\nThis book looks to distil principles for best practice and hot tips for dynamic/reproducible quarto coding. Some amazing Quarto resources are out there already, like Quarto for Scientists by Nicholas Tierney. This book will contribute to this pool of knowledge, providing some best practice principles for using Quarto in a functional and dynamic way.\n\n\nWho should read this\n\nIf you’ve ever wanted to automate a report, or streamline a document or process. 🧰\nIf you are sick of copy pasting charts, tables between your output folder and the documents.\nIf you enjoy developing reproducible analytical pipelines, beautiful and functionalised visualisations, or creatively writing dynamic text. 📊\nYou’re a process or structured code savant who loves making structured and neat code! 🛠️",
+    "crumbs": [
+      "About this"
+    ]
+  }
+]

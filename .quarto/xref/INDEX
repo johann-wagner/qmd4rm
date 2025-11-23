@@ -22,5 +22,14 @@
   },
   "flextables.qmd": {
     "flextables.html": "af06c456"
+  },
+  "word.qmd": {
+    "word.html": "f311ecb8"
+  },
+  "get-value.qmd": {
+    "get-value.html": "a0e19066"
+  },
+  "interpreting-values.qmd": {
+    "interpreting-values.html": "c3e724b8"
   }
 }

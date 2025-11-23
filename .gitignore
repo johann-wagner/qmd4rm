@@ -1,7 +1,37 @@
-.Rproj.user
+# Quarto build output
+_book/
+_site/
+*.html
+*.pdf
+*.docx
+
+# Quarto cache and intermediate files
+*.log
+*.aux
+*.toc
+*.out
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# R-specific files
 .Rhistory
 .RData
-.Ruserdata
+.Rproj.user/
+.Rproj
+.Rprofile
 
-/.quarto/
-**/*.quarto_ipynb
+# Temporary files
+*.tmp
+*.swp
+*.bak
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Dependency management
+renv/library/
+renv/staging/

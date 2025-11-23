@@ -1,11 +1,11 @@
 # The case for templating
-
 ```{r}
-#| label: report-process
+#| label: business-case
 #| echo: false
-#| fig-cap: An example of how transformational structured reports can be
-knitr::include_graphics(here::here("images","report-process.png"))
+#| fig-cap: Quarto generated reports save time and minimise human error
+knitr::include_graphics(here::here("images","business-case.png"))
 ```
+
 
 ## Templated reporting
 
@@ -13,7 +13,7 @@ knitr::include_graphics(here::here("images","report-process.png"))
 
 There are a number of benefits to investing in templated or parameterised reporting:
 
--   **Reduced repitition:** Avoiding repetition of producing basic or standard analysis.
+-   **Reduced repetition:** Avoiding repetition of producing basic or standard analysis.
 
 -   **Better publication workflow:**
 
@@ -28,8 +28,8 @@ Templated reporting is not without all faults.
 Transforming ad-hoc processes to more structured end to end reports can be quite an investment, particularly if users aren't already using the processes. It is advisableot consider building a Quarto template of a report to be a capital investment. You spend the additional effort to build up the capability to develop reports quicker, more consistently and even automatically.
 
 ```{r}
-#| label: business-case
+#| label: report-process
 #| echo: false
-#| fig-cap: Quarto generated reports save time and minimise human error
-knitr::include_graphics(here::here("images","business-case.png"))
+#| fig-cap: An example of how transformational structured reports can be
+knitr::include_graphics(here::here("images","report-process.png"))
 ```

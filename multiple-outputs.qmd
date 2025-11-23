@@ -1,0 +1,7 @@
+# Multiple-outputs
+
+In almost every organisation outside of academia Microsoft Word reigns supreme. This means for people who want to streamline reports, develop routine templates and bulk export parameterised reports they often have to play in the realm of .docx.
+
+This can come with various trade-offs
+
+The publication gap

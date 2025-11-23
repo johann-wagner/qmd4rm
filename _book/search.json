@@ -1,0 +1,52 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Quarto for Report Makers",
+    "section": "",
+    "text": "About this\nThis is a book using Quarto for generating reports. These can range from parameterised and automatic reports, to draft reports halfway on the way to publication.\nThis books content was initially drafted during the 2025 OceaniaR Hackathon in Canberra. It spawned from shared experiences of users generating primarily internal reports, working through hurdles and tricks on working with dynamic text, parameterisation, and multi-output formats.\n\n\nWhy does it exist?\nThis book looks to distil principles for best practice and hot tips for dynamic/reproducible quarto coding. Some amazing Quarto resources are out there already, like Quarto for Scientists by Nicholas Tierney. This book will contribute to this pool of knowledge, providing some best practice principles for using Quarto in a functional and dynamic way.\n\n\nWho should read this\n\nIf you’ve ever wanted to automate a report, or streamline a document or process. 🧰\nIf you are sick of copy pasting charts, tables between your output folder and the documents.\nIf you enjoy developing reproducible analytical pipelines, beautiful and functionalised visualisations, or creatively writing dynamic text. 📊\nYou’re a process or structured code savant who loves making structured and neat code! 🛠️",
+    "crumbs": [
+      "About this"
+    ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "This is a book created from markdown and executable code.\nSee Knuth (1984) for additional discussion of literate programming.\n\n1 + 1\n\n[1] 2\n\n\n\n\n\n\nKnuth, Donald E. 1984. “Literate Programming.” Comput. J. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "summary.html",
+    "href": "summary.html",
+    "title": "2  Summary",
+    "section": "",
+    "text": "In summary, this book has no content whatsoever.\n\n1 + 1\n\n[1] 2",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Summary</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Knuth, Donald E. 1984. “Literate Programming.” Comput.\nJ. 27 (2): 97–111. https://doi.org/10.1093/comjnl/27.2.97.",
+    "crumbs": [
+      "References"
+    ]
+  },
+  {
+    "objectID": "business-case.html",
+    "href": "business-case.html",
+    "title": "2  Report automation business process",
+    "section": "",
+    "text": "Testing\n\n\n\n\n\nAn example of how transformational structured reports can be",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Report automation business process</span>"
+    ]
+  }
+]

@@ -1,4 +1,5 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -7,21 +8,22 @@
   letterpaper,
   DIV=11,
   numbers=noendperiod]{scrreprt}
-
+\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  % \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -39,9 +41,6 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -107,8 +106,7 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -133,41 +131,22 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
-% definitions for citeproc citations
-\NewDocumentCommand\citeproctext{}{}
-\NewDocumentCommand\citeproc{mm}{%
-  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
-\makeatletter
- % allow citations to break across lines
- \let\@cite@ofmt\@firstofone
- % avoid brackets around text for \cite:
- \def\@biblabel#1{}
- \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
-\makeatother
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
- {\begin{list}{}{%
-  \setlength{\itemindent}{0pt}
-  \setlength{\leftmargin}{0pt}
-  \setlength{\parsep}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-   \setlength{\leftmargin}{\cslhangindent}
-   \setlength{\itemindent}{-1\cslhangindent}
-  \fi
-  % set entry spacing
-  \setlength{\itemsep}{#2\baselineskip}}}
- {\end{list}}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
-\usepackage{fontspec}
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+% \usepackage{fontspec}
 \usepackage{multirow}
 \usepackage{multicol}
 \usepackage{colortbl}
@@ -224,11 +203,15 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-
+\makeatletter
+\@ifpackageloaded{tikz}{}{\usepackage{tikz}}
+\makeatother
+        \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+          \node[shape=circle,draw,inner sep=1pt] (char) {{\scriptsize#1}};}}  
+                  
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Quarto for Report Makers},
   pdfauthor={OceaniaR Hackathon},
@@ -243,7 +226,6 @@
 \title{Quarto for Report Makers}
 \author{OceaniaR Hackathon}
 \date{2026-11-11}
-
 \begin{document}
 \maketitle
 
@@ -278,7 +260,7 @@ formats.
 
 \markboth{Why does it exist?}{Why does it exist?}
 
-This book looks to distil principles for best practice and hot tips for
+This book looks to distill principles for best practice and hot tips for
 dynamic/reproducible quarto coding. Some amazing Quarto resources are
 out there already, like~\href{https://qmd4sci.njtierney.com/}{Quarto for
 Scientists}~by Nicholas Tierney. This book will contribute to this pool
@@ -295,22 +277,17 @@ in a functional and dynamic way.
 \begin{itemize}
 \item
   If you've ever wanted to automate a report, or streamline a document
-  or process. 🧰
+  or process.
 \item
   If you are sick of copy pasting charts, tables between your output
   folder and the documents.
 \item
   If you enjoy developing reproducible analytical pipelines, beautiful
   and functionalised visualisations, or creatively writing dynamic text.
-  📊
 \item
   You're a process or structured code savant who loves making structured
-  and neat code! 🛠️
+  and neat code!
 \end{itemize}
-
-\bookmarksetup{startatroot}
-
-\chapter{Introduction}\label{introduction}
 
 \bookmarksetup{startatroot}
 
@@ -318,11 +295,11 @@ in a functional and dynamic way.
 
 \begin{figure}[H]
 
-{\centering \includegraphics[width=3.43in,height=\textheight,keepaspectratio]{images/report-process.png}
+{\centering \includegraphics[width=3.3in,height=\textheight,keepaspectratio]{images/business-case.png}
 
 }
 
-\caption{An example of how transformational structured reports can be}
+\caption{Quarto generated reports save time and minimise human error}
 
 \end{figure}%
 
@@ -335,7 +312,7 @@ parameterised reporting:
 
 \begin{itemize}
 \item
-  \textbf{Reduced repitition:} Avoiding repetition of producing basic or
+  \textbf{Reduced repetition:} Avoiding repetition of producing basic or
   standard analysis.
 \item
   \textbf{Better publication workflow:}
@@ -358,59 +335,136 @@ report to be a capital investment. You spend the additional effort to
 build up the capability to develop reports quicker, more consistently
 and even automatically.
 
-Additionally, there may be small hurdles in the processes that leave you
-with a publication gap. Things like specific formatting, unique
-organisation requirements on things like table of chart formats. This is
-particularly relevant when considering to choose a Word or PDF output.
-On one side, PDF outputs typically have cleaner and neater formats, with
-more tools for customisation, however, they are locked on completion
-(outside of some external PDF to Word tools). On the other side, Word
-outputs are inherently customisable for publications, but are typically
-generated in a less output-ready format.
-
 \begin{figure}[H]
 
-{\centering \includegraphics[width=3.61in,height=\textheight,keepaspectratio]{images/publication-gap.png}
+{\centering \includegraphics[width=3.43in,height=\textheight,keepaspectratio]{images/report-process.png}
 
 }
 
-\caption{Quarto generated reports may fall short of the `publication'
-version}
-
-\end{figure}%
-
-These are important facotrs to conisder from a cost benefit perspective.
-The nature of Quarto and rendering may mean that there is a significant
-dependency or time investment for including specific features. In order
-to adopt the benefits of templated reports often mean sacrificing or
-making concessions on these certain elements.
-
-\begin{figure}[H]
-
-{\centering \includegraphics[width=3.3in,height=\textheight,keepaspectratio]{images/business-case.png}
-
-}
-
-\caption{Quarto generated reports save time and minimise human error}
+\caption{An example of how transformational structured reports can be}
 
 \end{figure}%
 
 \bookmarksetup{startatroot}
 
-\chapter{Multiple-outputs}\label{multiple-outputs}
+\chapter{Output formats}\label{output-formats}
+
+Choosing an output format early is an important part of generating a
+template report.
+
+At a high level:
+
+\begin{itemize}
+\item
+  \textbf{PDF} outputs typically have cleaner and neater formats, with
+  more tools for customisation, however, they are locked on completion
+  (outside of some external PDF to Word tools).
+\item
+  \textbf{Word} outputs are inherently customisable for publications,
+  but are typically generated in a less output-ready format.
+\end{itemize}
 
 In almost every organisation outside of academia Microsoft Word reigns
 supreme. This means for people who want to streamline reports, develop
 routine templates and bulk export parameterised reports they often have
 to play in the realm of .docx.
 
-This can come with various trade-offs
+When using either format there may be small finnicky hurdles or elements
+in the processes that leave you with a \textbf{publication gap}. Things
+like specific formatting, unique organisation requirements on things
+like table of chart formats.
 
-The publication gap
+These are important factors to consider from a cost benefit perspective.
+The nature of Quarto and rendering may mean that there is a significant
+dependency or time investment for including specific features. In order
+to adopt the benefits of templated reports often mean sacrificing or
+making concessions on these certain elements.
 
-\part{Word + .docx}
+\{r\} \#\textbar{} label: publication-gap \#\textbar{} echo: false
+\#\textbar{} fig-cap: Quarto generated reports may fall short of the
+`publication' version
+knitr::include\_graphics(here::here(``images'',``publication-gap.png''))
+
+\bookmarksetup{startatroot}
+
+\chapter{Word Quirks}\label{word-quirks}
+
+Quarto supports rendering to Microsoft Word (.docx) and allows you to
+customise the output using a reference Word document. This is useful for
+applying corporate styles, headers, footers, and other Word-specific
+formatting. For more details, see:
+
+\href{https://quarto.org/docs/output-formats/ms-word.html}{Quarto Word
+Output Formats}
+\href{https://quarto.org/docs/output-formats/ms-word-templates.html}{Quarto
+Word Templates}
+
+\section{Using a Reference Word
+Document}\label{using-a-reference-word-document}
+
+To apply custom Word styles, specify a reference .docx file in your
+document's YAML front matter. This file can include:
+
+\begin{itemize}
+\tightlist
+\item
+  Headers and footers
+\item
+  Custom paragraph and text styles
+\item
+  Page layout settings
+\end{itemize}
+
+Example YAML:
+
+\begin{verbatim}
+format:
+  docx:
+    reference-doc: "Reference Doc/vacancy_report_template.docx"
+\end{verbatim}
+
+Use the following YAML to use a reference .docx file. This file can
+contain all the usual content a .docx file might have. Like headers,
+footers, custom word styles
+
+\section{Applying Custom Word Styles in
+Quarto}\label{applying-custom-word-styles-in-quarto}
+
+You can apply styles defined in your reference document using custom
+attributes. For example:
+
+\begin{verbatim}
+::: {custom-style="Key Points"}
+This text will be in the "Key Points" style.
+:::
+\end{verbatim}
+
+\begin{verbatim}
+format: docx: reference-doc: Reference Doc/vacancy_report_template.docx
+\end{verbatim}
+
+Use bold over any parameterised value to indicate to end users that this
+part of text has been dynamic.
+
+\section{How to create breaks}\label{how-to-create-breaks}
+
+To insert a page break in Word output, use:
+
+\begin{verbatim}
+\pagebreak
+\end{verbatim}
+
+For linebreaks:
+
+\begin{verbatim}
+\
+\end{verbatim}
+
+\bookmarksetup{startatroot}
 
 \chapter{Formatting tables}\label{formatting-tables}
+
+\bookmarksetup{startatroot}
 
 \chapter{Using \{flextables\} for pretty word
 tables}\label{using-flextables-for-pretty-word-tables}
@@ -773,30 +827,399 @@ And can be applied to relevant tables
 
 \bookmarksetup{startatroot}
 
-\chapter{Summary}\label{summary}
+\chapter{Get values from dataframes
+neatly}\label{get-values-from-dataframes-neatly}
 
-In summary, this book has no content whatsoever.
+Write a function that can take an input data source (a data frame at
+this stage) and extract a numeric value from a specific cell. The cell
+is identified via the column name and filter criteria that uniquely
+identify the row.
+
+Arguments should include:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{data} - the input data frame, in tidy format
+\item
+  \texttt{row} - use \texttt{filter()} for row selection - no default
+\item
+  \texttt{column} - use \texttt{select()} for column selection - no
+  default
+\item
+  \texttt{unit} - to define the unit of the value being returned (n, \%,
+  other?) - no default?
+\item
+  \texttt{digits} - define the number of significant digits to round to
+  - default \texttt{1}
+\item
+  \texttt{smallcell} - define the value at which cell suppression occurs
+  - default \texttt{FALSE}
+\item
+  \texttt{allowable\_range} - two-value argument defining the upper and
+  lower bounds the value must fall within - default \texttt{FALSE}
+\end{itemize}
+
+Checks on input to do:
+
+\begin{itemize}
+\tightlist
+\item[$\square$]
+  Is the input numeric? If not, extract digits. If no digits extracted,
+  return error
+\item[$\square$]
+  Is there more than one numeric value?
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\DecValTok{1} \SpecialCharTok{+} \DecValTok{1}
+\NormalTok{get\_value }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(}
+\NormalTok{    data, }\CommentTok{\# The input data }
+\NormalTok{    column, }\CommentTok{\# The column the value is in}
+\NormalTok{    criteria, }\CommentTok{\# The filter criteria to identify a singular row}
+    \AttributeTok{digits =} \DecValTok{2}\NormalTok{, }\CommentTok{\# The number of significant digits to round to}
+    \AttributeTok{unit =} \StringTok{"n"}\NormalTok{, }\CommentTok{\# The units for the value, either n, percent, or a custom value}
+    \AttributeTok{multiply =} \DecValTok{1}\NormalTok{, }\CommentTok{\# Set whether the value is a proportion or percentage}
+    \AttributeTok{suppress =} \ConstantTok{FALSE}\NormalTok{, }\CommentTok{\# Suppress values smaller than this value}
+    \AttributeTok{allowable\_range =} \ConstantTok{FALSE} \CommentTok{\# Set the min and max values the value must be between}
+\NormalTok{)\{}
+  \ControlFlowTok{if}\NormalTok{(}\FunctionTok{is.data.frame}\NormalTok{(data))\{}
+    \CommentTok{\# Pull the value based on the criteria and column}
+\NormalTok{  value }\OtherTok{\textless{}{-}}\NormalTok{ data }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{filter}\NormalTok{(\{\{ criteria \}\}) }\SpecialCharTok{|\textgreater{}} 
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{pull}\NormalTok{(\{\{ column \}\})}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{stop}\NormalTok{(}\StringTok{"Input data is not a data frame"}\NormalTok{)}
+\NormalTok{  \}}
+  
+  \CommentTok{\# Check that value is not empty}
+  \ControlFlowTok{if}\NormalTok{(}\FunctionTok{length}\NormalTok{(value) }\SpecialCharTok{==} \DecValTok{0} \SpecialCharTok{|} \FunctionTok{is.null}\NormalTok{(value))\{}
+    \FunctionTok{stop}\NormalTok{(}\StringTok{"No values returned by criteria"}\NormalTok{)}
+\NormalTok{  \}}
+  \CommentTok{\# Check there are not multiple values returned}
+  \ControlFlowTok{if}\NormalTok{(}\FunctionTok{length}\NormalTok{(value) }\SpecialCharTok{\textgreater{}} \DecValTok{1}\NormalTok{)\{}
+    \FunctionTok{stop}\NormalTok{(}\StringTok{"More than one row was returned by criteria"}\NormalTok{)}
+\NormalTok{  \}}
+  
+  \ControlFlowTok{if}\NormalTok{(}\FunctionTok{class}\NormalTok{(value) }\SpecialCharTok{==} \StringTok{"character"}\NormalTok{) \{}
+    \ControlFlowTok{if}\NormalTok{(stringr}\SpecialCharTok{::}\FunctionTok{str\_count}\NormalTok{(value,}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{d+?(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{d+)"}\NormalTok{) }\SpecialCharTok{\textgreater{}} \DecValTok{1}\NormalTok{)\{}
+      \FunctionTok{stop}\NormalTok{(}\StringTok{"Multiple possible values detected in cell"}\NormalTok{)}
+\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(stringr}\SpecialCharTok{::}\FunctionTok{str\_count}\NormalTok{(value,}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{d+?(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{d+)"}\NormalTok{) }\SpecialCharTok{==} \DecValTok{0}\NormalTok{)\{}
+      \FunctionTok{stop}\NormalTok{(}\StringTok{"No digits detected in cell"}\NormalTok{)}
+\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{      value }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}
+\NormalTok{        stringr}\SpecialCharTok{::}\FunctionTok{str\_extract}\NormalTok{(}
+          \AttributeTok{string =}\NormalTok{ value, }
+          \AttributeTok{pattern =} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{d+?(}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{d+)"}
+\NormalTok{          )}
+\NormalTok{        )}
+\NormalTok{    \}}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.numeric}\NormalTok{(value)) \{}
+    \FunctionTok{stop}\NormalTok{(}\StringTok{"column is not numeric or character"}\NormalTok{)}
+\NormalTok{  \}}
+  
+  \ControlFlowTok{if}\NormalTok{(unit }\SpecialCharTok{==}\StringTok{"percent"}\NormalTok{)\{}
+    \CommentTok{\# Format as a percentage}
+    \FunctionTok{return}\NormalTok{(}
+\NormalTok{      scales}\SpecialCharTok{::}\FunctionTok{label\_percent}\NormalTok{(}
+        \AttributeTok{accuracy =}\NormalTok{ digits,}
+        \AttributeTok{scale =}\NormalTok{ multiply,}
+        \AttributeTok{big.mark =} \StringTok{","}
+\NormalTok{        )(value)}
+\NormalTok{      )}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    value }\OtherTok{\textless{}{-}}\NormalTok{ scales}\SpecialCharTok{::}\FunctionTok{label\_number}\NormalTok{(}\AttributeTok{accuracy =}\NormalTok{ digits, }\AttributeTok{big.mark =} \StringTok{","}\NormalTok{)(value)}
+\NormalTok{  \} }
+  
+  \ControlFlowTok{if}\NormalTok{(unit }\SpecialCharTok{==} \StringTok{"n"}\NormalTok{)\{}
+    \FunctionTok{return}\NormalTok{(value)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{return}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(value, }\StringTok{" "}\NormalTok{, unit))}
+\NormalTok{  \}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\section{Example}\label{example}
+
+The errors and output are demonstrated using the following dataset
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df }\OtherTok{\textless{}{-}}\NormalTok{ tibble}\SpecialCharTok{::}\FunctionTok{tibble}\NormalTok{(}
+  \AttributeTok{quintile =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{5}\NormalTok{), }\DecValTok{2}\NormalTok{),}
+  \AttributeTok{rurality =} \FunctionTok{c}\NormalTok{(}\FunctionTok{rep}\NormalTok{(}\StringTok{"Regional"}\NormalTok{,}\DecValTok{5}\NormalTok{), }\FunctionTok{rep}\NormalTok{(}\StringTok{"Urban"}\NormalTok{, }\DecValTok{5}\NormalTok{)),}
+  \AttributeTok{count =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\FloatTok{1251.12}\NormalTok{,}\FloatTok{5125.23}\NormalTok{,}\FloatTok{6162.12}\NormalTok{,}\FloatTok{9949.0125}\NormalTok{,}\DecValTok{1661}\NormalTok{), }\DecValTok{2}\NormalTok{),}
+  \AttributeTok{n\_and\_pct =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"15.6 (12.2\%)"}\NormalTok{,}\StringTok{"1 (0.1\%)"}\NormalTok{,}\StringTok{"51.5 (85.2\%)"}\NormalTok{, }\StringTok{"102 (115\%)"}\NormalTok{, }\StringTok{"223 100\%"}\NormalTok{), }\DecValTok{2}\NormalTok{),}
+  \AttributeTok{n\_n =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"15.2 1"}\NormalTok{, }\StringTok{"61.4 1"}\NormalTok{, }\StringTok{"61.0 2"}\NormalTok{, }\StringTok{"32.4 4.2"}\NormalTok{, }\StringTok{"95.2 15.2"}\NormalTok{), }\DecValTok{2}\NormalTok{),}
+  \AttributeTok{pct =} \FunctionTok{rep}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\StringTok{"0.12"}\NormalTok{,}\StringTok{"0.56"}\NormalTok{),}\DecValTok{5}\NormalTok{),}
+  \AttributeTok{listcol =}\NormalTok{ stringr}\SpecialCharTok{::}\FunctionTok{str\_extract\_all}\NormalTok{(n\_and\_pct,}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{d"}\NormalTok{)}
+\NormalTok{)}
+
+\NormalTok{df}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-[1] 2
+# A tibble: 10 x 7
+   quintile rurality count n_and_pct    n_n       pct   listcol  
+      <dbl> <chr>    <dbl> <chr>        <chr>     <chr> <list>   
+ 1        1 Regional 1251. 15.6 (12.2%) 15.2 1    0.12  <chr [6]>
+ 2        1 Regional 5125. 1 (0.1%)     61.4 1    0.56  <chr [3]>
+ 3        3 Regional 6162. 51.5 (85.2%) 61.0 2    0.12  <chr [6]>
+ 4        4 Regional 9949. 102 (115%)   32.4 4.2  0.56  <chr [6]>
+ 5        5 Regional 1661  223 100%     95.2 15.2 0.12  <chr [6]>
+ 6        1 Urban    1251. 15.6 (12.2%) 15.2 1    0.56  <chr [6]>
+ 7        1 Urban    5125. 1 (0.1%)     61.4 1    0.12  <chr [3]>
+ 8        3 Urban    6162. 51.5 (85.2%) 61.0 2    0.56  <chr [6]>
+ 9        4 Urban    9949. 102 (115%)   32.4 4.2  0.12  <chr [6]>
+10        5 Urban    1661  223 100%     95.2 15.2 0.56  <chr [6]>
 \end{verbatim}
+
+\subsection{Numeric output}\label{numeric-output}
+
+Return a number
+
+\phantomsection\label{annotated-cell-13}%
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{get\_value}\NormalTok{(}
+  \AttributeTok{data =}\NormalTok{ df,}
+  \AttributeTok{column =}\NormalTok{ count, }\hspace*{\fill}\NormalTok{\circled{1}}
+  \AttributeTok{criteria =}\NormalTok{ (rurality }\SpecialCharTok{==} \StringTok{\textquotesingle{}Regional\textquotesingle{}} \SpecialCharTok{\&}\NormalTok{ quintile }\SpecialCharTok{==} \DecValTok{5}\NormalTok{), }\hspace*{\fill}\NormalTok{\circled{2}}
+  \AttributeTok{digits =} \FloatTok{1.1}\NormalTok{, }\hspace*{\fill}\NormalTok{\circled{3}}
+  \AttributeTok{unit =} \StringTok{"n"} \hspace*{\fill}\NormalTok{\circled{4}}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{description}
+\tightlist
+\item[\circled{1}]
+Which column the value is to come from
+\item[\circled{2}]
+The criteria to filter rows by. Multiple criteria are allowed, they must
+be written between parentheses and multiple conditions specified using
+usual logic notation (e.g.~\texttt{\textbar{}}, \texttt{\&}). Note
+\texttt{dplyr::filter()} notation using commas is not allowed
+\item[\circled{3}]
+Using \texttt{\{scales\}} notation to define the expected format.
+Specifying \texttt{digits\ =\ 1.1} for a value of 14.61136 would return
+14.6, while specifying \texttt{digits\ =\ 1.11} returns 14.61.
+\item[\circled{4}]
+The unit the value is in. \texttt{n} returns the value as it is.
+\texttt{percent} returns a value formatted as a percentage including the
+\texttt{\%} sign. Any other string than these two options is pasted at
+the end. For example:
+\end{description}
+
+\begin{verbatim}
+[1] "1,661"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{get\_value}\NormalTok{(df, count, (rurality }\SpecialCharTok{==} \StringTok{\textquotesingle{}Regional\textquotesingle{}} \SpecialCharTok{\&}\NormalTok{ quintile }\SpecialCharTok{==} \DecValTok{5}\NormalTok{), }\FloatTok{1.1}\NormalTok{, }\StringTok{"kcal/day"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "1,661 kcal/day"
+\end{verbatim}
+
+\subsection{Percentage output}\label{percentage-output}
+
+Return as percentage
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{get\_value}\NormalTok{(}
+  \AttributeTok{data =}\NormalTok{ df,}
+  \AttributeTok{criteria =}\NormalTok{ (rurality }\SpecialCharTok{==} \StringTok{\textquotesingle{}Regional\textquotesingle{}} \SpecialCharTok{\&}\NormalTok{ quintile }\SpecialCharTok{==} \DecValTok{5}\NormalTok{),}
+  \AttributeTok{column =}\NormalTok{ pct,}
+  \AttributeTok{unit =} \StringTok{"percent"}\NormalTok{,}
+  \AttributeTok{digits =} \FloatTok{1.11}\NormalTok{,}
+  \AttributeTok{multiply =} \DecValTok{100}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "12.21%"
+\end{verbatim}
+
+The number of people living regionally is 1,660
+
+\section{Error conditions}\label{error-conditions}
+
+The data argument only accepts data frames and is checked using
+\texttt{is.data.frame(data)}
+
+The value pulled from the data frame must not be empty
+\texttt{(length(value)\ ==\ 0\ \textbar{}\ is.null(value))}
+
+There must be only one pulled value, meaning list/vector/df columns are
+not acceptable \texttt{length(value)\ \textgreater{}\ 1}
+
+There must not more than one digit value to be extracted
+\texttt{(stringr::str\_count(value,"\textbackslash{}\textbackslash{}d+?(\textbackslash{}\textbackslash{}.\textbackslash{}\textbackslash{}d+)")\ \textgreater{}\ 1)}
+
+There must not be zero values to extract
+\texttt{(stringr::str\_count(value,"\textbackslash{}\textbackslash{}d+?(\textbackslash{}\textbackslash{}.\textbackslash{}\textbackslash{}d+)")\ ==\ 0)}
+
+If the value is not a character, it must not be a class other than
+numeric \texttt{!is.numeric(value)}
+
+\section{Further development}\label{further-development}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Allow for more inputs than data frames, e.g.~vectors
+\item
+\end{enumerate}
 
 \bookmarksetup{startatroot}
 
-\chapter*{References}\label{references}
-\addcontentsline{toc}{chapter}{References}
+\chapter{Dynamically writing text}\label{dynamically-writing-text}
 
-\markboth{References}{References}
+Dynamically writing text can make parameterised and automatic reports
+come alive. Dynamic text can provide context and story to the figures
+reported. This text is generally used in:
 
-\phantomsection\label{refs}
-\begin{CSLReferences}{0}{1}
-\end{CSLReferences}
+\begin{itemize}
+\item
+  Comparing numbers across time (increase, decrease, stay the same)
+\item
+  Comparing numbers to benchmarks/baselines
+\item
+  Or providing context to whether a high number is a good of bad thing
+\end{itemize}
+
+To add extra flavour, approximate magnitude terminologies could be
+incorporated.
+
+For instance EFSA has some guidelines for communicating approximate
+probability.
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Probability term & Subjective probability range \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Almost certain & 99-100\% \\
+Extremely likely & 95-99\% \\
+Very likely & 90-95\% \\
+Likely & 66-90\% \\
+About as likely as not & 33-66\% \\
+Unlikely & 10-33\% \\
+Very unlikely & 5-10\% \\
+Extremely unlikely & 1-5\% \\
+Almost impossible & 0-1\% \\
+\end{longtable}
+
+\url{https://multimedia.efsa.europa.eu/uncertainty-tutorial/uncertainty-communication/expressions-approximate.html}
+
+Or for comparing values, something like this could be utilised:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+Term & Rough ratio compared to reference \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Much more than & \textgreater{} 10× \\
+Substantially more than & \textasciitilde{} 5 -- 10× \\
+Considerably more than & \textasciitilde{} 2 -- 5× \\
+Somewhat more than & \textasciitilde{} 1.25 -- 2× \\
+About the same as & \textasciitilde{} 0.80 -- 1.25× \\
+Somewhat less than & \textasciitilde{} 0.50 -- 0.80× \\
+Considerably less than & \textasciitilde{} 0.20 -- 0.50× \\
+Substantially less than & \textasciitilde{} 0.10 -- 0.20× \\
+Much less than & \textless{} 0.10× \\
+\end{longtable}
+
+An example function is below, which takes from `get\_value()` and
+provides text interpreting the sentence based on parameters. You could
+also add features to this function to add a pool of synonyms so the
+dynamic text is less repetitive.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{interpret\_sentence }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(}
+\NormalTok{    value,                    }\CommentTok{\# output of grab\_value(), e.g. "12.3\%" or "0.12"}
+    \AttributeTok{context =} \ConstantTok{NULL}\NormalTok{,           }\CommentTok{\# optional text: "of Regional quintile{-}1 participants"}
+    \AttributeTok{higher\_is\_better =} \ConstantTok{TRUE}\NormalTok{,  }\CommentTok{\# whether a high \% is "good"}
+    \AttributeTok{digits =} \DecValTok{1}\NormalTok{,               }\CommentTok{\# number of decimal places in printed \%}
+    \AttributeTok{cutpoints =} \FunctionTok{c}\NormalTok{(}\FloatTok{0.05}\NormalTok{, }\FloatTok{0.25}\NormalTok{, }\FloatTok{0.75}\NormalTok{, }\FloatTok{0.95}\NormalTok{) }\CommentTok{\# thresholds for verbal labels)}
+\NormalTok{)}
+\NormalTok{\{}
+   \CommentTok{\# {-}{-}{-} INTERNAL capitaliser {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  ucfirst }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) \{}
+    \FunctionTok{paste0}\NormalTok{(}\FunctionTok{toupper}\NormalTok{(}\FunctionTok{substr}\NormalTok{(x, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)), }\FunctionTok{substr}\NormalTok{(x, }\DecValTok{2}\NormalTok{, }\FunctionTok{nchar}\NormalTok{(x)))}
+\NormalTok{  \}}
+  
+  \CommentTok{\# {-}{-}{-} 1. Get numeric proportion from value {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(value) }\SpecialCharTok{!=} \DecValTok{1}\NormalTok{L }\SpecialCharTok{||} \FunctionTok{is.na}\NormalTok{(value)) \{}
+    \FunctionTok{stop}\NormalTok{(}\StringTok{"interpret\_pct\_sentence() expects a single non{-}missing value."}\NormalTok{)}
+\NormalTok{  \}}
+  
+  \CommentTok{\# value might be "12.3\%", "0.123", 0.123, 12.3, etc.}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.character}\NormalTok{(value)) \{}
+\NormalTok{    num }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{str\_extract}\NormalTok{(value, }\StringTok{"{-}?}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{d+}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.?}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{d*"}\NormalTok{))}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    num }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(value)}
+\NormalTok{  \}}
+  
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.na}\NormalTok{(num)) \{}
+    \FunctionTok{stop}\NormalTok{(}\StringTok{"Could not extract a numeric value from \textquotesingle{}value\textquotesingle{}."}\NormalTok{)}
+\NormalTok{  \}}
+  
+  \CommentTok{\# If looks like 0{-}1, treat as proportion; if \textgreater{}1, assume percentage (0{-}100)}
+\NormalTok{  p }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (num }\SpecialCharTok{\textgreater{}} \DecValTok{1}\NormalTok{) num }\SpecialCharTok{/} \DecValTok{100} \ControlFlowTok{else}\NormalTok{ num}
+  
+  \CommentTok{\# {-}{-}{-} 2. Translate proportion into qualitative phrase {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  cp }\OtherTok{\textless{}{-}}\NormalTok{ cutpoints}
+\NormalTok{  phrase }\OtherTok{\textless{}{-}}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{case\_when}\NormalTok{(}
+\NormalTok{    p }\SpecialCharTok{\textless{}}\NormalTok{  cp[}\DecValTok{1}\NormalTok{] }\SpecialCharTok{\textasciitilde{}} \ControlFlowTok{if}\NormalTok{ (higher\_is\_better) }\StringTok{"a very small proportion"} \ControlFlowTok{else} \StringTok{"almost none"}\NormalTok{,}
+\NormalTok{    p }\SpecialCharTok{\textless{}}\NormalTok{  cp[}\DecValTok{2}\NormalTok{] }\SpecialCharTok{\textasciitilde{}} \StringTok{"a minority"}\NormalTok{,}
+\NormalTok{    p }\SpecialCharTok{\textless{}}\NormalTok{  cp[}\DecValTok{3}\NormalTok{] }\SpecialCharTok{\textasciitilde{}} \StringTok{"around half"}\NormalTok{,}
+\NormalTok{    p }\SpecialCharTok{\textless{}}\NormalTok{  cp[}\DecValTok{4}\NormalTok{] }\SpecialCharTok{\textasciitilde{}} \StringTok{"a clear majority"}\NormalTok{,}
+    \ConstantTok{TRUE}       \SpecialCharTok{\textasciitilde{}} \ControlFlowTok{if}\NormalTok{ (higher\_is\_better) }\StringTok{"almost all"} \ControlFlowTok{else} \StringTok{"the vast majority"}
+\NormalTok{  )}
+  
+  \CommentTok{\# {-}{-}{-} 3. Build percentage string {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  pct\_string }\OtherTok{\textless{}{-}}\NormalTok{ scales}\SpecialCharTok{::}\FunctionTok{percent}\NormalTok{(p, }\AttributeTok{accuracy =} \DecValTok{1} \SpecialCharTok{/} \DecValTok{10}\SpecialCharTok{\^{}}\NormalTok{digits)}
+  
+  \CommentTok{\# {-}{-}{-} 4. Build final sentence {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{  phrase\_cap }\OtherTok{\textless{}{-}} \FunctionTok{ucfirst}\NormalTok{(phrase)}
+  
+  \ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{is.null}\NormalTok{(context) }\SpecialCharTok{\&\&} \FunctionTok{nzchar}\NormalTok{(context)) \{}
+\NormalTok{    out }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(phrase\_cap, }\StringTok{" ("}\NormalTok{, pct\_string, }\StringTok{") "}\NormalTok{, context, }\StringTok{"."}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    out }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(phrase\_cap, }\StringTok{" ("}\NormalTok{, pct\_string, }\StringTok{")."}\NormalTok{)}
+\NormalTok{  \}}
+  
+\NormalTok{  out}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# interpret\_sentence(}
+\CommentTok{\#   grab\_value(df, quintile == 4 \& rurality == "Regional", pct,}
+\CommentTok{\#              unit = "percent", digits = 4),}
+\CommentTok{\#   context = "of Regional quintile{-}4 participants", }
+\CommentTok{\#   higher\_is\_better = FALSE,}
+\CommentTok{\#   digits = 1}
+\CommentTok{\# )}
+\end{Highlighting}
+\end{Shaded}
 
 \cleardoublepage
 \phantomsection

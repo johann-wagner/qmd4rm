@@ -1,0 +1,21 @@
+{
+  "hash": "e82ff6f6cdb325b005eb8364f8f5f5a5",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# The case for templating\n\n::: {.cell}\n::: {.cell-output-display}\n![Quarto generated reports save time and minimise human error](images/business-case.png){width=3.3in}\n:::\n:::\n\n\n\n## Templated reporting\n\n### Benefits\n\nThere are a number of benefits to investing in templated or parameterised reporting:\n\n-   **Reduced repetition:** Avoiding repetition of producing basic or standard analysis.\n\n-   **Better publication workflow:**\n\n-   **Consistency:** Can provide greater confidence with results, with less chance of human error.\n\n-   **Capability transfer:** Analysis in a structured or templated format can be useful for knowledge transfer.\n\n### Headaches\n\nTemplated reporting is not without all faults.\n\nTransforming ad-hoc processes to more structured end to end reports can be quite an investment, particularly if users aren't already using the processes. It is advisableot consider building a Quarto template of a report to be a capital investment. You spend the additional effort to build up the capability to develop reports quicker, more consistently and even automatically.\n\n\n::: {.cell}\n::: {.cell-output-display}\n![An example of how transformational structured reports can be](images/report-process.png){width=3.43in}\n:::\n:::\n\n",
+    "supporting": [
+      "business-case_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {
+      "knitr": [
+        "{\"type\":\"list\",\"attributes\":{},\"value\":[]}"
+      ]
+    },
+    "preserve": null,
+    "postProcess": false
+  }
+}

@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Quarto for Report Makers",
     "section": "",
-    "text": "About this\nThis is a book using Quarto for generating reports. These can range from parameterised and automatic reports, to draft reports halfway on the way to publication.\nThis books content was initially drafted during the 2025 OceaniaR Hackathon in Canberra. It spawned from shared experiences of users generating primarily internal reports, working through hurdles and tricks on working with dynamic text, parameterisation, and multi-output formats.\n\n\nWhy does it exist?\nThis book looks to distil principles for best practice and hot tips for dynamic/reproducible quarto coding. Some amazing Quarto resources are out there already, like Quarto for Scientists by Nicholas Tierney. This book will contribute to this pool of knowledge, providing some best practice principles for using Quarto in a functional and dynamic way.\n\n\nWho should read this\n\nIf you’ve ever wanted to automate a report, or streamline a document or process. 🧰\nIf you are sick of copy pasting charts, tables between your output folder and the documents.\nIf you enjoy developing reproducible analytical pipelines, beautiful and functionalised visualisations, or creatively writing dynamic text. 📊\nYou’re a process or structured code savant who loves making structured and neat code! 🛠️",
+    "text": "About this\nThis is a book using Quarto for generating reports. These can range from parameterised and automatic reports, to draft reports halfway on the way to publication.\nThis books content was initially drafted during the 2025 OceaniaR Hackathon in Canberra. It spawned from shared experiences of users generating primarily internal reports, working through hurdles and tricks on working with dynamic text, parameterisation, and multi-output formats.\n\n\nWhy does it exist?\nThis book looks to distill principles for best practice and hot tips for dynamic/reproducible quarto coding. Some amazing Quarto resources are out there already, like Quarto for Scientists by Nicholas Tierney. This book will contribute to this pool of knowledge, providing some best practice principles for using Quarto in a functional and dynamic way.\n\n\nWho should read this\n\nIf you’ve ever wanted to automate a report, or streamline a document or process. 🧰\nIf you are sick of copy pasting charts, tables between your output folder and the documents.\nIf you enjoy developing reproducible analytical pipelines, beautiful and functionalised visualisations, or creatively writing dynamic text. 📊\nYou’re a process or structured code savant who loves making structured and neat code! 🛠️",
     "crumbs": [
       "About this"
     ]
@@ -30,18 +30,18 @@
     ]
   },
   {
-    "objectID": "multiple-outputs.html",
-    "href": "multiple-outputs.html",
-    "title": "2  Multiple-outputs",
+    "objectID": "output-options.html",
+    "href": "output-options.html",
+    "title": "2  Output formats",
     "section": "",
     "text": "Choosing an output format early is an important part of generating a template report.\nAt a high level:\n\nPDF outputs typically have cleaner and neater formats, with more tools for customisation, however, they are locked on completion (outside of some external PDF to Word tools).\nWord outputs are inherently customisable for publications, but are typically generated in a less output-ready format.\n\nIn almost every organisation outside of academia Microsoft Word reigns supreme. This means for people who want to streamline reports, develop routine templates and bulk export parameterised reports they often have to play in the realm of .docx.\nWhen using either format there may be small finnicky hurdles or elements in the processes that leave you with a publication gap. Things like specific formatting, unique organisation requirements on things like table of chart formats.\nThese are important factors to consider from a cost benefit perspective. The nature of Quarto and rendering may mean that there is a significant dependency or time investment for including specific features. In order to adopt the benefits of templated reports often mean sacrificing or making concessions on these certain elements.\n{r} #| label: publication-gap #| echo: false #| fig-cap: Quarto generated reports may fall short of the ‘publication’ version knitr::include_graphics(here::here(“images”,“publication-gap.png”))",
     "crumbs": [
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Multiple-outputs</span>"
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Output formats</span>"
     ]
   },
   {
-    "objectID": "word.html",
-    "href": "word.html",
+    "objectID": "word-quirks.html",
+    "href": "word-quirks.html",
     "title": "3  Word Quirks",
     "section": "",
     "text": "3.1 Using a Reference Word Document\nQuarto supports rendering to Microsoft Word (.docx) and allows you to customise the output using a reference Word document. This is useful for applying corporate styles, headers, footers, and other Word-specific formatting. For more details, see:\nQuarto Word Output Formats Quarto Word Templates\nTo apply custom Word styles, specify a reference .docx file in your document’s YAML front matter. This file can include:\nExample YAML:\nUse the following YAML to use a reference .docx file. This file can contain all the usual content a .docx file might have. Like headers, footers, custom word styles",
@@ -50,8 +50,8 @@
     ]
   },
   {
-    "objectID": "word.html#using-a-reference-word-document",
-    "href": "word.html#using-a-reference-word-document",
+    "objectID": "word-quirks.html#using-a-reference-word-document",
+    "href": "word-quirks.html#using-a-reference-word-document",
     "title": "3  Word Quirks",
     "section": "",
     "text": "Headers and footers\nCustom paragraph and text styles\nPage layout settings\n\n\nformat:\n  docx:\n    reference-doc: \"Reference Doc/vacancy_report_template.docx\"",
@@ -60,8 +60,8 @@
     ]
   },
   {
-    "objectID": "word.html#applying-custom-word-styles-in-quarto",
-    "href": "word.html#applying-custom-word-styles-in-quarto",
+    "objectID": "word-quirks.html#applying-custom-word-styles-in-quarto",
+    "href": "word-quirks.html#applying-custom-word-styles-in-quarto",
     "title": "3  Word Quirks",
     "section": "3.2 Applying Custom Word Styles in Quarto",
     "text": "3.2 Applying Custom Word Styles in Quarto\nYou can apply styles defined in your reference document using custom attributes. For example:\n::: {custom-style=\"Key Points\"}\nThis text will be in the \"Key Points\" style.\n:::\nformat: docx: reference-doc: Reference Doc/vacancy_report_template.docx\nUse bold over any parameterised value to indicate to end users that this part of text has been dynamic.",
@@ -70,8 +70,8 @@
     ]
   },
   {
-    "objectID": "word.html#how-to-create-breaks",
-    "href": "word.html#how-to-create-breaks",
+    "objectID": "word-quirks.html#how-to-create-breaks",
+    "href": "word-quirks.html#how-to-create-breaks",
     "title": "3  Word Quirks",
     "section": "3.3 How to create breaks",
     "text": "3.3 How to create breaks\nTo insert a page break in Word output, use:\n\\pagebreak\nFor linebreaks:\n\\",
@@ -92,41 +92,41 @@
   {
     "objectID": "get-value.html",
     "href": "get-value.html",
-    "title": "5  Goal",
+    "title": "5  Get values from dataframes neatly",
     "section": "",
     "text": "5.1 Example\nWrite a function that can take an input data source (a data frame at this stage) and extract a numeric value from a specific cell. The cell is identified via the column name and filter criteria that uniquely identify the row.\nArguments should include:\nChecks on input to do:\nThe errors and output are demonstrated using the following dataset\ndf &lt;- tibble::tibble(\n  quintile = rep(c(1,1,3,4,5), 2),\n  rurality = c(rep(\"Regional\",5), rep(\"Urban\", 5)),\n  count = rep(c(1251.12,5125.23,6162.12,9949.0125,1661), 2),\n  n_and_pct = rep(c(\"15.6 (12.2%)\",\"1 (0.1%)\",\"51.5 (85.2%)\", \"102 (115%)\", \"223 100%\"), 2),\n  n_n = rep(c(\"15.2 1\", \"61.4 1\", \"61.0 2\", \"32.4 4.2\", \"95.2 15.2\"), 2),\n  pct = rep(c(\"0.12\",\"0.56\"),5),\n  listcol = stringr::str_extract_all(n_and_pct,\"\\\\d\")\n)\n\ndf\n\n# A tibble: 10 × 7\n   quintile rurality count n_and_pct    n_n       pct   listcol  \n      &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt; &lt;list&gt;   \n 1        1 Regional 1251. 15.6 (12.2%) 15.2 1    0.12  &lt;chr [6]&gt;\n 2        1 Regional 5125. 1 (0.1%)     61.4 1    0.56  &lt;chr [3]&gt;\n 3        3 Regional 6162. 51.5 (85.2%) 61.0 2    0.12  &lt;chr [6]&gt;\n 4        4 Regional 9949. 102 (115%)   32.4 4.2  0.56  &lt;chr [6]&gt;\n 5        5 Regional 1661  223 100%     95.2 15.2 0.12  &lt;chr [6]&gt;\n 6        1 Urban    1251. 15.6 (12.2%) 15.2 1    0.56  &lt;chr [6]&gt;\n 7        1 Urban    5125. 1 (0.1%)     61.4 1    0.12  &lt;chr [3]&gt;\n 8        3 Urban    6162. 51.5 (85.2%) 61.0 2    0.56  &lt;chr [6]&gt;\n 9        4 Urban    9949. 102 (115%)   32.4 4.2  0.12  &lt;chr [6]&gt;\n10        5 Urban    1661  223 100%     95.2 15.2 0.56  &lt;chr [6]&gt;",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Goal</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Get values from dataframes neatly</span>"
     ]
   },
   {
     "objectID": "get-value.html#example",
     "href": "get-value.html#example",
-    "title": "5  Goal",
+    "title": "5  Get values from dataframes neatly",
     "section": "",
     "text": "5.1.1 Numeric output\nReturn a number\n\nget_value(\n  data = df,\n1  column = count,\n2  criteria = (rurality == 'Regional' & quintile == 5),\n3  digits = 1.1,\n4  unit = \"n\"\n  )\n\n\n1\n\nWhich column the value is to come from\n\n2\n\nThe criteria to filter rows by. Multiple criteria are allowed, they must be written between parentheses and multiple conditions specified using usual logic notation (e.g. |, &). Note dplyr::filter() notation using commas is not allowed\n\n3\n\nUsing {scales} notation to define the expected format. Specifying digits = 1.1 for a value of 14.61136 would return 14.6, while specifying digits = 1.11 returns 14.61.\n\n4\n\nThe unit the value is in. n returns the value as it is. percent returns a value formatted as a percentage including the % sign. Any other string than these two options is pasted at the end. For example:\n\n\n\n\n[1] \"1,661\"\n\n\n\nget_value(df, count, (rurality == 'Regional' & quintile == 5), 1.1, \"kcal/day\")\n\n[1] \"1,661 kcal/day\"\n\n\n\n\n5.1.2 Percentage output\nReturn as percentage\n\nget_value(\n  data = df,\n  criteria = (rurality == 'Regional' & quintile == 5),\n  column = pct,\n  unit = \"percent\",\n  digits = 1.11,\n  multiply = 100\n)\n\n[1] \"12.21%\"\n\n\nThe number of people living regionally is 1,660",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Goal</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Get values from dataframes neatly</span>"
     ]
   },
   {
     "objectID": "get-value.html#error-conditions",
     "href": "get-value.html#error-conditions",
-    "title": "5  Goal",
+    "title": "5  Get values from dataframes neatly",
     "section": "5.2 Error conditions",
     "text": "5.2 Error conditions\nThe data argument only accepts data frames and is checked using is.data.frame(data)\nThe value pulled from the data frame must not be empty (length(value) == 0 | is.null(value))\nThere must be only one pulled value, meaning list/vector/df columns are not acceptable length(value) &gt; 1\nThere must not more than one digit value to be extracted (stringr::str_count(value,\"\\\\d+?(\\\\.\\\\d+)\") &gt; 1)\nThere must not be zero values to extract (stringr::str_count(value,\"\\\\d+?(\\\\.\\\\d+)\") == 0)\nIf the value is not a character, it must not be a class other than numeric !is.numeric(value)",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Goal</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Get values from dataframes neatly</span>"
     ]
   },
   {
     "objectID": "get-value.html#further-development",
     "href": "get-value.html#further-development",
-    "title": "5  Goal",
+    "title": "5  Get values from dataframes neatly",
     "section": "5.3 Further development",
     "text": "5.3 Further development\n\nAllow for more inputs than data frames, e.g. vectors",
     "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Goal</span>"
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Get values from dataframes neatly</span>"
     ]
   },
   {

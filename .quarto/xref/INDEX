@@ -22,5 +22,11 @@
   },
   "quarto-resources.qmd": {
     "quarto-resources.html": "55333d08"
+  },
+  "output-options.qmd": {
+    "output-options.html": "40c46d36"
+  },
+  "word-quirks.qmd": {
+    "word-quirks.html": "8d7fef5e"
   }
 }
